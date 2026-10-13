@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="hr">
+<html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ExoticSwitch uređaj</title>
+<title>ExoticSwitch device</title>
 <style>
 /* raspored: uređaj i terarij jedan pored drugog, na mobitelu jedno ispod drugog; ispod klizač doba dana */
 :root {
@@ -90,30 +90,30 @@ header p { margin: 2px 0 0; color: var(--prigušeno); font-size: .88rem; }
 <div class="okvir">
     <header>
         <h1>ExoticSwitch</h1>
-        <p>Prototip uređaja za svjetlo u terariju. Namjesti ga tipkama i gledaj kako se mijenja svjetlo.</p>
+        <p>Prototype of a terrarium light controller. Set it up with the buttons and watch the light change.</p>
     </header>
 
     <div class="mreza">
-        <section class="kartica" aria-label="Uređaj">
-            <h2>Uređaj</h2>
+        <section class="kartica" aria-label="Device">
+            <h2>Device</h2>
             <div class="kucište">
                     <div style="flex:1;min-width:0">
                         <div class="bezel"><canvas id="ekran" width="400" height="200"></canvas></div>
                         <div class="natpis">EXOTICSWITCH</div>
                     </div>
                     <div class="tipke">
-                        <button class="tipka" id="t-gore" aria-label="Gore">▲</button>
-                        <button class="tipka ok" id="t-ok" aria-label="Potvrdi">OK</button>
-                        <button class="tipka" id="t-dolje" aria-label="Dolje">▼</button>
-                        <button class="tipka natrag" id="t-natrag" aria-label="Natrag">←</button>
+                        <button class="tipka" id="t-gore" aria-label="Up">▲</button>
+                        <button class="tipka ok" id="t-ok" aria-label="Confirm">OK</button>
+                        <button class="tipka" id="t-dolje" aria-label="Down">▼</button>
+                        <button class="tipka natrag" id="t-natrag" aria-label="Back">←</button>
                     </div>
                 </div>
-            <p class="savjet">Drži ▲ ili ▼ za brže listanje. ← vraća jedan korak.</p>
+            <p class="savjet">Hold ▲ or ▼ to scroll faster. ← goes back one step.</p>
         </section>
 
-        <section class="kartica" aria-label="Terarij">
-            <h2>Terarij</h2>
-            <svg class="terarij" viewBox="0 0 480 300" role="img" aria-label="Terarij pod svjetlom">
+        <section class="kartica" aria-label="Terrarium">
+            <h2>Terrarium</h2>
+            <svg class="terarij" viewBox="0 0 480 300" role="img" aria-label="Terrarium under the light">
                         <defs>
                             <clipPath id="unutra"><rect x="16" y="44" width="448" height="236"/></clipPath>
                             <linearGradient id="g-zid" x1="0" y1="0" x2="0" y2="1">
@@ -262,11 +262,11 @@ header p { margin: 2px 0 0; color: var(--prigušeno); font-size: .88rem; }
         </section>
     </div>
 
-    <section class="kartica" aria-label="Doba dana">
-        <h2>Doba dana</h2>
+    <section class="kartica" aria-label="Time of day">
+        <h2>Time of day</h2>
         <div class="doba">
             <div><div class="sat" id="doba-sat">–</div><div class="datum" id="doba-datum">–</div></div>
-            <input type="range" id="klizac" min="0" max="1439" step="1" value="720" aria-label="Doba dana">
+            <input type="range" id="klizac" min="0" max="1439" step="1" value="720" aria-label="Time of day">
             <div class="oznake"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
         </div>
     </section>
@@ -284,109 +284,109 @@ const DAN_MS = 864e5;
 // ================= PODACI =================
 // dom: kategorija → [ime, lon, zimsko vrijeme kao pomak od UTC-a u satima, lat] (skraćeni popis)
 const DOM = [
-    ["Europa", [
-        ["Hrvatska", 16.0, 1, 45.5], ["Bosna i Hercegovina", 17.8, 1, 44.0],
-        ["Srbija", 20.9, 1, 44.2], ["Slovenija", 14.8, 1, 46.1],
-        ["Crna Gora", 19.3, 1, 42.6], ["Sjeverna Makedonija", 21.7, 1, 41.6],
-        ["Austrija", 14.1, 1, 47.6], ["Njemačka", 10.4, 1, 51.0],
-        ["Švicarska", 8.2, 1, 46.9], ["Italija", 12.6, 1, 42.8],
-        ["Francuska", 2.4, 1, 46.6], ["Španjolska", -3.7, 1, 40.4],
-        ["Portugal", -8.2, 0, 39.6], ["Ujedinjeno Kraljevstvo", -1.8, 0, 52.8],
-        ["Irska", -8.0, 0, 53.2], ["Nizozemska", 5.3, 1, 52.2],
-        ["Belgija", 4.5, 1, 50.6], ["Danska", 10.0, 1, 55.9],
-        ["Švedska", 16.0, 1, 59.5], ["Norveška", 10.0, 1, 60.5],
-        ["Finska", 25.7, 2, 61.5], ["Poljska", 19.4, 1, 52.0],
-        ["Češka", 15.5, 1, 49.8], ["Slovačka", 19.7, 1, 48.7],
-        ["Mađarska", 19.5, 1, 47.2], ["Rumunjska", 25.0, 2, 45.9],
-        ["Bugarska", 25.5, 2, 42.7], ["Grčka", 22.9, 2, 38.8],
-        ["Turska", 35.2, 3, 39.0], ["Rusija — Moskva", 37.6, 3, 55.8],
+    ["Europe", [
+        ["Croatia", 16.0, 1, 45.5], ["Bosnia and Herzegovina", 17.8, 1, 44.0],
+        ["Serbia", 20.9, 1, 44.2], ["Slovenia", 14.8, 1, 46.1],
+        ["Montenegro", 19.3, 1, 42.6], ["North Macedonia", 21.7, 1, 41.6],
+        ["Austria", 14.1, 1, 47.6], ["Germany", 10.4, 1, 51.0],
+        ["Switzerland", 8.2, 1, 46.9], ["Italy", 12.6, 1, 42.8],
+        ["France", 2.4, 1, 46.6], ["Spain", -3.7, 1, 40.4],
+        ["Portugal", -8.2, 0, 39.6], ["United Kingdom", -1.8, 0, 52.8],
+        ["Ireland", -8.0, 0, 53.2], ["Netherlands", 5.3, 1, 52.2],
+        ["Belgium", 4.5, 1, 50.6], ["Denmark", 10.0, 1, 55.9],
+        ["Sweden", 16.0, 1, 59.5], ["Norway", 10.0, 1, 60.5],
+        ["Finland", 25.7, 2, 61.5], ["Poland", 19.4, 1, 52.0],
+        ["Czechia", 15.5, 1, 49.8], ["Slovakia", 19.7, 1, 48.7],
+        ["Hungary", 19.5, 1, 47.2], ["Romania", 25.0, 2, 45.9],
+        ["Bulgaria", 25.5, 2, 42.7], ["Greece", 22.9, 2, 38.8],
+        ["Turkey", 35.2, 3, 39.0], ["Russia — Moscow", 37.6, 3, 55.8],
     ]],
-    ["Azija", [
-        ["Izrael", 35.0, 2, 31.8], ["UAE", 54, 4, 24.5],
-        ["Indija", 79, 5.5, 22.0], ["Tajland", 101, 7, 14.0],
-        ["Malezija", 102, 8, 3.5], ["Singapur", 103.8, 8, 1.35],
-        ["Indonezija — Java", 110, 7, -7.0], ["Filipini", 121, 8, 13.0],
-        ["Kina", 113, 8, 32.0], ["Južna Koreja", 127.5, 9, 36.5],
+    ["Asia", [
+        ["Israel", 35.0, 2, 31.8], ["UAE", 54, 4, 24.5],
+        ["India", 79, 5.5, 22.0], ["Thailand", 101, 7, 14.0],
+        ["Malaysia", 102, 8, 3.5], ["Singapore", 103.8, 8, 1.35],
+        ["Indonesia — Java", 110, 7, -7.0], ["Philippines", 121, 8, 13.0],
+        ["China", 113, 8, 32.0], ["South Korea", 127.5, 9, 36.5],
         ["Japan", 138, 9, 36.0],
     ]],
-    ["Afrika", [
-        ["Maroko", -7, 1, 32.0], ["Egipat", 31.2, 2, 27.0],
-        ["Nigerija", 7.5, 1, 9.0], ["Kenija", 37, 3, -1.0],
-        ["Južna Afrika", 25, 2, -28.0],
+    ["Africa", [
+        ["Morocco", -7, 1, 32.0], ["Egypt", 31.2, 2, 27.0],
+        ["Nigeria", 7.5, 1, 9.0], ["Kenya", 37, 3, -1.0],
+        ["South Africa", 25, 2, -28.0],
     ]],
-    ["Sjeverna i Srednja Amerika", [
-        ["SAD — istok", -78, -5, 39.0], ["SAD — središnji", -92, -6, 37.0],
-        ["SAD — planinski", -108, -7, 40.0], ["SAD — Arizona", -111.7, -7, 33.5],
-        ["SAD — zapad", -120, -8, 37.0], ["Kanada — istok", -75, -5, 45.0],
-        ["Kanada — zapad", -123, -8, 49.3], ["Meksiko", -99, -6, 21.0],
+    ["North & Central America", [
+        ["USA — East", -78, -5, 39.0], ["USA — Central", -92, -6, 37.0],
+        ["USA — Mountain", -108, -7, 40.0], ["USA — Arizona", -111.7, -7, 33.5],
+        ["USA — West", -120, -8, 37.0], ["Canada — East", -75, -5, 45.0],
+        ["Canada — West", -123, -8, 49.3], ["Mexico", -99, -6, 21.0],
     ]],
-    ["Južna Amerika", [
-        ["Kolumbija", -74, -5, 4.6], ["Peru", -76, -5, -10.0],
-        ["Brazil — jugoistok", -46.6, -3, -23.0], ["Čile", -71, -4, -33.5],
+    ["South America", [
+        ["Colombia", -74, -5, 4.6], ["Peru", -76, -5, -10.0],
+        ["Brazil — Southeast", -46.6, -3, -23.0], ["Chile", -71, -4, -33.5],
         ["Argentina", -64, -3, -34.0],
     ]],
-    ["Australija i Oceanija", [
-        ["Australija — istok", 149, 10, -34.0], ["Australija — Queensland", 150, 10, -24.0],
-        ["Australija — zapad", 121, 8, -32.0], ["Novi Zeland", 174, 12, -40.0],
+    ["Australia & Oceania", [
+        ["Australia — East", 149, 10, -34.0], ["Australia — Queensland", 150, 10, -24.0],
+        ["Australia — West", 121, 8, -32.0], ["New Zealand", 174, 12, -40.0],
     ]],
 ];
 
 // stanište: kategorija → [regija, lat, primjer životinja]
 const STANISTA = [
-    ["Afrika", [
-        ["Sahara, sjever Afrike", 25.0, "Uromastyx"],
-        ["Zapadna Afrika — Gana, Togo", 7.5, "Python regius"],
-        ["Istočna Afrika — Kenija, Tanzanija", -3.0, "Trioceros jacksonii"],
+    ["Africa", [
+        ["Sahara, North Africa", 25.0, "Uromastyx"],
+        ["West Africa — Ghana, Togo", 7.5, "Python regius"],
+        ["East Africa — Kenya, Tanzania", -3.0, "Trioceros jacksonii"],
     ]],
-    ["Madagaskar", [
-        ["Madagaskar — istok, kišna šuma", -18.9, "Calumma, Phelsuma"],
-        ["Madagaskar — sjever (Nosy Be)", -13.3, "panter kameleon"],
-        ["Madagaskar — jug, suha šuma", -24.0, "Astrochelys radiata"],
+    ["Madagascar", [
+        ["Madagascar — east, rainforest", -18.9, "Calumma, Phelsuma"],
+        ["Madagascar — north (Nosy Be)", -13.3, "panther chameleon"],
+        ["Madagascar — south, dry forest", -24.0, "Astrochelys radiata"],
     ]],
-    ["Azija i Arabija", [
-        ["Arabija — Jemen", 15.0, "Chamaeleo calyptratus"],
-        ["Srednja Azija — Pakistan", 31.0, "Eublepharis macularius"],
-        ["Jugoistočna Azija — Tajland", 14.0, "tokay gekon"],
+    ["Asia & Arabia", [
+        ["Arabia — Yemen", 15.0, "Chamaeleo calyptratus"],
+        ["Central Asia — Pakistan", 31.0, "Eublepharis macularius"],
+        ["Southeast Asia — Thailand", 14.0, "tokay gecko"],
     ]],
-    ["Australija i Oceanija", [
-        ["Australija — središnja pustinja", -23.7, "Pogona vitticeps"],
-        ["Australija — Queensland, tropi", -17.0, "Saltuarius"],
-        ["Nova Gvineja", -6.0, "Morelia viridis"],
-        ["Nova Kaledonija", -21.5, "Correlophus ciliatus"],
+    ["Australia & Oceania", [
+        ["Australia — central desert", -23.7, "Pogona vitticeps"],
+        ["Australia — Queensland, tropics", -17.0, "Saltuarius"],
+        ["New Guinea", -6.0, "Morelia viridis"],
+        ["New Caledonia", -21.5, "Correlophus ciliatus"],
     ]],
-    ["Sjeverna i Srednja Amerika", [
-        ["SAD — jugoistok", 33.0, "Pantherophis guttatus"],
-        ["Meksiko — pustinja Sonora", 30.0, "Heloderma suspectum"],
-        ["Srednja Amerika — Kostarika", 10.0, "Agalychnis callidryas"],
+    ["North & Central America", [
+        ["USA — Southeast", 33.0, "Pantherophis guttatus"],
+        ["Mexico — Sonoran Desert", 30.0, "Heloderma suspectum"],
+        ["Central America — Costa Rica", 10.0, "Agalychnis callidryas"],
     ]],
-    ["Južna Amerika", [
-        ["Gvajana / Surinam", 5.0, "Dendrobates tinctorius"],
-        ["Amazona — Manaus", -3.1, "boe, žabe"],
-        ["Gran Chaco — Argentina, Paragvaj", -24.0, "Salvator merianae"],
+    ["South America", [
+        ["Guyana / Suriname", 5.0, "Dendrobates tinctorius"],
+        ["Amazon — Manaus", -3.1, "boas, frogs"],
+        ["Gran Chaco — Argentina, Paraguay", -24.0, "Salvator merianae"],
     ]],
-    ["Europa", [
-        ["Mediteran", 40.0, "Testudo hermanni"],
+    ["Europe", [
+        ["Mediterranean", 40.0, "Testudo hermanni"],
     ]],
-    ["Općenito", [
-        ["Ekvator — općenito", 0.0, "12 h dana cijele godine"],
+    ["General", [
+        ["Equator — general", 0.0, "12 h of daylight all year"],
     ]],
 ];
 
 const ZADANO_SUNCE = { max_jacina: 90, kelvin_min: 2700, kelvin_max: 5600 };
-// ručni dan: 8 dijelova; svaki drži svoju jačinu i boju od svog početka do sljedećeg,
-// a na početku se kroz "prijelaz" minuta postupno pretopi iz prethodnog
+// ručni dan: 8 faza po visini sunca (sumrak −6°…0°, zlatni sat −4°…+6°, podne, …);
+// svaka drži svoju jačinu i boju od svog početka do sljedeće,
+// a na početku se kroz "prijelaz" minuta postupno pretopi iz prethodne. Night = ugašeno.
 const ZADANO_RUCNO = { prijelaz_min: 20, sekcije: [
-    { ime: "Zora",     od: "06:00", jacina: 5,   kelvin: 2700 },
-    { ime: "Jutro",    od: "07:00", jacina: 30,  kelvin: 3000 },
-    { ime: "Rani dan", od: "09:00", jacina: 60,  kelvin: 4000 },
-    { ime: "Dan",      od: "11:00", jacina: 85,  kelvin: 5000 },
-    { ime: "Podne",    od: "13:00", jacina: 100, kelvin: 5600 },
-    { ime: "Popodne",  od: "15:00", jacina: 80,  kelvin: 5000 },
-    { ime: "Večer",    od: "18:00", jacina: 35,  kelvin: 3200 },
-    { ime: "Noć",      od: "20:00", jacina: 0,   kelvin: 2700 },
+    { ime: "Dawn",      od: "06:00", jacina: 5,   kelvin: 2700 },
+    { ime: "Sunrise",   od: "06:45", jacina: 20,  kelvin: 2700 },
+    { ime: "Morning",   od: "08:00", jacina: 50,  kelvin: 3800 },
+    { ime: "Midday",    od: "11:00", jacina: 100, kelvin: 5600 },
+    { ime: "Afternoon", od: "15:00", jacina: 75,  kelvin: 4800 },
+    { ime: "Sunset",    od: "18:00", jacina: 30,  kelvin: 3000 },
+    { ime: "Dusk",      od: "19:00", jacina: 5,   kelvin: 2700 },
+    { ime: "Night",     od: "20:00", jacina: 0,   kelvin: 2700 },
 ] };
 const kopijaRucno = r => ({ prijelaz_min: r.prijelaz_min, sekcije: r.sekcije.map(x => ({ ...x })) });
-const DANI_HR = { Mon: "Pon", Tue: "Uto", Wed: "Sri", Thu: "Čet", Fri: "Pet", Sat: "Sub", Sun: "Ned" };
 
 // ================= VRIJEME I ZONE =================
 const fmtCache = new Map();
@@ -401,11 +401,11 @@ function dijelovi(ms, tz) {
     if (typeof tz === "number") {
         const t = new Date(ms + tz * 60000);
         return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate(), h: t.getUTCHours(), min: t.getUTCMinutes(),
-                 s: t.getUTCSeconds(), wd: ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"][t.getUTCDay()] };
+                 s: t.getUTCSeconds(), wd: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][t.getUTCDay()] };
     }
     const o = {};
     for (const p of fmt(tz).formatToParts(new Date(ms))) o[p.type] = p.value;
-    return { y: +o.year, m: +o.month, d: +o.day, h: +o.hour, min: +o.minute, s: +o.second, wd: DANI_HR[o.weekday] || o.weekday };
+    return { y: +o.year, m: +o.month, d: +o.day, h: +o.hour, min: +o.minute, s: +o.second, wd: o.weekday };
 }
 // koliko je minuta lokalno vrijeme ispred UTC-a (Zagreb ljeti: +120)
 function offsetMin(ms, tz) {
@@ -588,7 +588,7 @@ function ekranLista({ naslov, korak, stavke: st, index = 0, opis, onOk, hint, na
                 c.fillStyle = DIM; c.fillRect(W - 16, 35 + (VID * 24 - 2) * od / n, 4, Math.max(8, (VID * 24 - 2) * VID / n));
             }
             if (opis) tekst(skrati(opis(i), W - 24, 13), 12, H - 32, { px: 13, boja: DIM });
-            podnozje(hint || "▲▼ biraj · OK potvrdi · ← natrag");
+            podnozje(hint || "▲▼ select · OK confirm · ← back");
         },
         gore() { i = (i - 1 + L().length) % L().length; },
         dolje() { i = (i + 1) % L().length; },
@@ -630,7 +630,7 @@ function ekranBrojevi({ naslov, korak, polja, predlozak, napomena, onOk, pregled
                 });
             });
             if (napomena) napomena(v).forEach((s, k) => tekst(skrati(s, W - 24, 13), 12, H - 46 + k * 16, { px: 13, boja: DIM }));
-            podnozje(f < polja.length - 1 ? "▲▼ mijenjaj · OK dalje · ← natrag" : "▲▼ mijenjaj · OK potvrdi · ← natrag");
+            podnozje(f < polja.length - 1 ? "▲▼ change · OK next · ← back" : "▲▼ change · OK confirm · ← back");
         },
         gore() { promijeni(f, 1); },
         dolje() { promijeni(f, -1); },
@@ -651,7 +651,7 @@ function ekranInfo({ naslov, korak, linije, onOk, hint, upozorenje, natrag }) {
                 tekst(skrati(o.t, W - 24, o.px || 15, o.b), o.centar ? W / 2 : 12, 52 + k * 22,
                     { px: o.px || 15, b: o.b, boja: o.dim ? DIM : (upozorenje && k === 0 ? "#ffd27a" : FG), align: o.centar ? "center" : "left" });
             });
-            podnozje(hint || "OK dalje");
+            podnozje(hint || "OK next");
         },
         gore() {}, dolje() {},
         ok() { onOk(); },
@@ -673,7 +673,7 @@ function vratiSe() {
 function korakKategorija({ naslov, grupe, poc, opis, korak, gotovo }) {
     const gi = Math.max(0, grupe.findIndex(g => g[1].some(x => x[0] === poc)));
     postavi(ekranLista({ naslov, korak, stavke: grupe.map(g => g[0]), index: gi,
-        opis: k => `${grupe[k][1].length} na popisu`,
+        opis: k => `${grupe[k][1].length} in list`,
         onOk: k => {
             const stavke = grupe[k][1], si = Math.max(0, stavke.findIndex(x => x[0] === poc));
             postavi(ekranLista({ naslov: grupe[k][0].toUpperCase(), korak, stavke: stavke.map(x => x[0]), index: si,
@@ -681,37 +681,37 @@ function korakKategorija({ naslov, grupe, poc, opis, korak, gotovo }) {
         } }));
 }
 function korakDrzava(poc, gotovo, korak) {
-    korakKategorija({ naslov: "GDJE ŽIVIŠ?", grupe: DOM, poc, korak,
-        opis: d => `podne po suncu ≈ ${d[1] >= 0 ? d[1] + "° E" : -d[1] + "° W"}`,
+    korakKategorija({ naslov: "WHERE DO YOU LIVE?", grupe: DOM, poc, korak,
+        opis: d => `solar noon ≈ ${d[1] >= 0 ? d[1] + "° E" : -d[1] + "° W"}`,
         gotovo: d => gotovo({ mjesto: d[0], lat: d[3], lon: d[1], utc_pomak: d[2] }) });
 }
 function korakDatum(poc, gotovo, korak) {
-    postavi(ekranBrojevi({ naslov: "DATUM", korak,
+    postavi(ekranBrojevi({ naslov: "DATE", korak,
         polja: [{ v: poc.d, min: 1, max: v => danaUGodini(v[2], v[1]) }, { v: poc.m, min: 1, max: 12 },
                 { v: poc.y, min: 2024, max: 2099, wrap: false, fmt: x => String(x) }],
-        predlozak: [[0, ".", 1, ".", 2, "."]],
-        napomena: () => ["Dan, mjesec, godina."],
+        predlozak: [[0, "/", 1, "/", 2]],
+        napomena: () => ["Day / month / year."],
         onOk: v => gotovo({ d: Math.min(v[0], danaUGodini(v[2], v[1])), m: v[1], y: v[2] }) }));
 }
 function korakLjetno(poc, gotovo, korak) {
-    postavi(ekranLista({ naslov: "LJETNO VRIJEME", korak, stavke: ["Ne — zimsko vrijeme", "Da — sat je pomaknut +1 h"],
+    postavi(ekranLista({ naslov: "DAYLIGHT SAVING", korak, stavke: ["No — standard time", "Yes — clock is +1 h"],
         index: poc ? 1 : 0,
-        opis: () => "Isto kao na satu na zidu. Mijenjaš u izborniku.",
+        opis: () => "Same as your wall clock. Change it in the menu.",
         onOk: k => gotovo(k === 1) }));
 }
 function korakSat(poc, gotovo, korak) {
-    postavi(ekranBrojevi({ naslov: "KOLIKO JE SATI?", korak,
+    postavi(ekranBrojevi({ naslov: "WHAT TIME IS IT?", korak,
         polja: [{ v: poc.h, min: 0, max: 23 }, { v: poc.min, min: 0, max: 59 }],
         predlozak: [[0, ":", 1]],
-        napomena: () => ["Upiši što piše na satu na zidu."],
+        napomena: () => ["Enter the time on your wall clock."],
         onOk: v => gotovo({ h: v[0], min: v[1] }) }));
 }
 function korakStaniste(poc, gotovo, korak) {
-    korakKategorija({ naslov: "STANIŠTE", grupe: STANISTA, poc, korak,
-        opis: x => `${Math.abs(x[1])}° ${x[1] < 0 ? "J" : "S"} · ${x[2]}`,
+    korakKategorija({ naslov: "HABITAT", grupe: STANISTA, poc, korak,
+        opis: x => `${Math.abs(x[1])}° ${x[1] < 0 ? "S" : "N"} · ${x[2]}`,
         gotovo: x => gotovo({ regija: x[0], lat: x[1] }) });
 }
-const mjULabel = v => v === 0 ? "0 mj" : (v > 0 ? "+" : "−") + Math.abs(v) + " mj";
+const mjULabel = v => v === 0 ? "0 mo" : (v > 0 ? "+" : "−") + Math.abs(v) + " mo";
 const mjUDane = v => Math.round(v * 30.44);
 // duljina dana u satima (izlazak→zalazak, −0.833°)
 function duljinaDana(lat, dek) {
@@ -733,14 +733,14 @@ function korakSezona(poc, gotovo, korak, latSt, latDom) {
     let mj = Math.round(poc / 30.44);
     postavi({
         crtaj() {
-            zaglavlje("SEZONA · DULJINA DANA", korak);
+            zaglavlje("SEASON · DAY LENGTH", korak);
             const p = dijelovi(uredajMs(), tzUredaja()), pomak = mjUDane(mj), ds = datumStanista(p.y, p.m, p.d, pomak);
             c.font = F(18, true);
             const lab = mjULabel(mj), w = c.measureText(lab).width;
-            tekst("pomak", 12, 52, { px: 15, boja: DIM });
+            tekst("shift", 12, 52, { px: 15, boja: DIM });
             c.fillStyle = FG; c.fillRect(70, 36, w + 8, 22);
             tekst(lab, 74, 53, { px: 18, b: true, boja: BG });
-            tekst(`tamo je ${ds.d}.${ds.m}.`, W - 12, 52, { px: 13, boja: DIM, align: "right" });
+            tekst(`there: ${ds.d}/${ds.m}`, W - 12, 52, { px: 13, boja: DIM, align: "right" });
             // graf
             const god = godina(p.y, latDom, latSt, pomak), sve = god.flatMap(t => [t.doma, t.tamo]).filter(v => v != null);
             const lo = Math.floor(Math.min(...sve) - 0.5), hi = Math.ceil(Math.max(...sve) + 0.5);
@@ -759,8 +759,8 @@ function korakSezona(poc, gotovo, korak, latSt, latDom) {
             const danas = danUGodini(p.y, p.m, p.d);
             c.fillStyle = DIM; c.fillRect(X(danas), yT, 1, yB - yT);
             const dd = god.reduce((a, t) => Math.abs(t.doy - danas) < Math.abs(a.doy - danas) ? t : a);
-            tekst((latDom != null ? `— doma ${fmtH(dd.doma)}   ` : "") + `- - tamo ${fmtH(dd.tamo)}`, 12, 178, { px: 12 });
-            podnozje("▲▼ pomak · OK potvrdi · ← natrag");
+            tekst((latDom != null ? `— home ${fmtH(dd.doma)}   ` : "") + `- - there ${fmtH(dd.tamo)}`, 12, 178, { px: 12 });
+            podnozje("▲▼ shift · OK confirm · ← back");
         },
         gore() { mj = Math.min(6, mj + 1); },
         dolje() { mj = Math.max(-6, mj - 1); },
@@ -768,43 +768,43 @@ function korakSezona(poc, gotovo, korak, latSt, latDom) {
     });
 }
 function korakNacin(poc, gotovo, korak) {
-    postavi(ekranLista({ naslov: "NAČIN RADA", korak, stavke: ["☀ Sunce staništa", "⏱ Ručni raspored"],
+    postavi(ekranLista({ naslov: "MODE", korak, stavke: ["☀ Habitat sun", "⏱ Manual mode"],
         index: poc === "rucno" ? 1 : 0,
-        opis: k => k === 0 ? "izlazak, zalazak, jačina i boja same" : "ti zadaš kad pali i gasi",
+        opis: k => k === 0 ? "sunrise, sunset and color by themselves" : "you set the 8 phases of the day",
         onOk: k => gotovo(k === 0 ? "sunce" : "rucno") }));
 }
 function korakSunce(poc, gotovo, korak) {
-    postavi(ekranBrojevi({ naslov: "SUNCE · GRANICE", korak,
+    postavi(ekranBrojevi({ naslov: "SUN · LIMITS", korak,
         polja: [{ v: poc.max_jacina, min: 5, max: 100, step: 5, wrap: false, fmt: x => String(x).padStart(3, " ") },
                 { v: poc.kelvin_min, min: 2700, max: v => v[2], step: 100, wrap: false, fmt: x => String(x) },
                 { v: poc.kelvin_max, min: v => v[1], max: 6500, step: 100, wrap: false, fmt: x => String(x) }],
-        predlozak: [["Najjače    ", 0, " %"], ["Najžuće    ", 1, " K"], ["Najbjelje  ", 2, " K"]],
-        napomena: () => ["Traka odmah pokazuje odabrano."],
+        predlozak: [["Brightest  ", 0, " %"], ["Warmest    ", 1, " K"], ["Coolest    ", 2, " K"]],
+        napomena: () => ["The strip shows your choice live."],
         pregled: (v, f) => ({ j: v[0], k: f === 1 ? v[1] : v[2] }),
         onOk: v => gotovo({ max_jacina: v[0], kelvin_min: v[1], kelvin_max: v[2] }) }));
 }
 function korakRucno(poc, gotovo, korak) {
     const r = kopijaRucno(poc), S = r.sekcije;
     const redak = x => `${x.od}  ${x.ime.padEnd(9, " ")}${String(x.jacina).padStart(3, " ")} %`;
-    postavi(ekranLista({ naslov: "RUČNI DAN", korak,
-        stavke: () => [...S.map(redak), `Prijelaz ${r.prijelaz_min} min`, "✓ Gotovo"],
-        opis: k => k < S.length ? `${S[k].kelvin} K · OK = uredi` : k === S.length ? "koliko se dugo pretapa u idući dio" : "spremi raspored",
+    postavi(ekranLista({ naslov: "MANUAL MODE", korak,
+        stavke: () => [...S.map(redak), `Fade ${r.prijelaz_min} min`, "✓ Done"],
+        opis: k => k < S.length ? `${S[k].kelvin} K · OK = edit` : k === S.length ? "how long it fades into the next phase" : "save schedule",
         pregled: k => k < S.length ? { j: S[k].jacina, k: S[k].kelvin } : null,
-        hint: "▲▼ biraj · OK uredi · ← natrag",
+        hint: "▲▼ select · OK edit · ← back",
         onOk: k => {
             if (k === S.length + 1) return gotovo(r);
-            if (k === S.length) return postavi(ekranBrojevi({ naslov: "PRIJELAZ", korak,
+            if (k === S.length) return postavi(ekranBrojevi({ naslov: "FADE", korak,
                 polja: [{ v: r.prijelaz_min, min: 0, max: 60, step: 5, wrap: false, fmt: x => String(x).padStart(2, " ") }],
                 predlozak: [["", 0, " min"]],
-                napomena: () => ["0 = naglo. Inače se svjetlo postupno", "pretopi iz prošlog dijela u idući."],
+                napomena: () => ["0 = instant. Otherwise the light slowly", "fades from one phase into the next."],
                 onOk: v => { r.prijelaz_min = v[0]; vratiSe(); } }));
             const x = S[k], min = k ? uMin(S[k - 1].od) + 15 : 0, max = k < S.length - 1 ? uMin(S[k + 1].od) - 15 : 1425;
             postavi(ekranBrojevi({ naslov: x.ime.toUpperCase(), korak,
                 polja: [{ v: uMin(x.od), min, max, step: 15, wrap: false, fmt: hhmm },
                         { v: x.jacina, min: 0, max: 100, step: 5, wrap: false, fmt: v => String(v).padStart(3, " ") },
                         { v: x.kelvin, min: 2700, max: 6500, step: 100, wrap: false, fmt: v => String(v) }],
-                predlozak: [["Od      ", 0], ["Jačina  ", 1, " %"], ["Boja    ", 2, " K"]],
-                napomena: () => ["Traka odmah pokazuje odabrano."],
+                predlozak: [["Start      ", 0], ["Brightness ", 1, " %"], ["Color      ", 2, " K"]],
+                napomena: () => ["The strip shows your choice live."],
                 pregled: v => ({ j: v[1], k: v[2] }),
                 onOk: v => { Object.assign(x, { od: hhmm(v[0]), jacina: v[1], kelvin: v[2] }); vratiSe(); } }));
         } }));
@@ -818,14 +818,14 @@ function namjestiSat(datum, sat, tz) {
 // ---------- tokovi ----------
 function pocetak() {
     U.nacrt = {};
-    postavi(ekranInfo({ naslov: "DOBRODOŠLI",
-        linije: () => ["Postavljanje traje", "oko 2 minute.", { t: "Trebaš: državu, točan sat", dim: true }, { t: "i stanište životinje.", dim: true }],
-        hint: "OK kreni", onOk: rucnoPostavljanje, natrag: () => true }), true);
+    postavi(ekranInfo({ naslov: "WELCOME",
+        linije: () => ["Setup takes", "about 2 minutes.", { t: "You need: your country, the exact", dim: true }, { t: "time and your animal's habitat.", dim: true }],
+        hint: "OK start", onOk: rucnoPostavljanje, natrag: () => true }), true);
 }
 // svaki korak kreće od onoga što je već upisano, pa ← i ponovni OK ne brišu odabir
 function rucnoPostavljanje() {
     const n = U.nacrt, K = k => k + "/8";
-    korakDrzava(n.dom?.mjesto || "Hrvatska", dom => {
+    korakDrzava(n.dom?.mjesto || "Croatia", dom => {
         n.dom = dom;
         korakDatum(n.datum || { d: 1, m: 10, y: 2026 }, datum => {          // polazni datum = datum firmvera
             n.datum = datum;
@@ -853,24 +853,24 @@ function rucnoPostavljanje() {
 }
 function pregled() {
     const n = U.nacrt;
-    postavi(ekranInfo({ naslov: "GOTOVO ✓", korak: "provjeri",
+    postavi(ekranInfo({ naslov: "DONE ✓", korak: "review",
         linije: () => [
-            "Dom:  " + n.dom.mjesto,
-            "Tamo: " + n.staniste.regija,
-            "Sezona: " + mjULabel(Math.round(n.pomak_dana / 30.44)),
-            n.nacin === "sunce" ? `☀ do ${n.sunce.max_jacina} % · ${n.sunce.kelvin_min}–${n.sunce.kelvin_max} K`
-                                : `⏱ ${n.rucno.sekcije.length} dijelova · prijelaz ${n.rucno.prijelaz_min} min`,
+            "Home:    " + n.dom.mjesto,
+            "Habitat: " + n.staniste.regija,
+            "Season:  " + mjULabel(Math.round(n.pomak_dana / 30.44)),
+            n.nacin === "sunce" ? `☀ up to ${n.sunce.max_jacina} % · ${n.sunce.kelvin_min}–${n.sunce.kelvin_max} K`
+                                : `⏱ ${n.rucno.sekcije.length} phases · fade ${n.rucno.prijelaz_min} min`,
         ],
-        hint: "OK spremi i pokreni",
+        hint: "OK save and start",
         onOk: () => spremi({ dom: n.dom, ljetno: n.ljetno, staniste: n.staniste, pomak_dana: n.pomak_dana, nacin: n.nacin,
                              sunce: n.sunce, rucno: n.rucno }) }));
 }
 function spremi(post) { U.post = post; U.nacrt = {}; U.stranica = 0; glavni(); }
 
 function satNevazeci() {
-    postavi(ekranInfo({ naslov: "⚠ SAT NIJE TOČAN", upozorenje: true,
-        linije: () => ["Sat je izgubio vrijeme", "(prazna baterija).", "Svjetlo je UGAŠENO dok", "ne upišeš datum i sat."],
-        hint: "OK upiši datum i sat",
+    postavi(ekranInfo({ naslov: "⚠ CLOCK NOT SET", upozorenje: true,
+        linije: () => ["The clock lost its time", "(battery ran out).", "The light is OFF until", "you enter date and time."],
+        hint: "OK enter date and time",
         natrag: () => true,
         onOk: () => korakDatum({ d: 1, m: 10, y: 2026 }, datum =>
             korakSat({ h: 12, min: 0 }, sat => { namjestiSat(datum, sat, zona(U.post)); glavni(); }, "2/2"), "1/2") }), true);
@@ -892,13 +892,13 @@ function crtajGlavni() {
     const s = svjetloSad(); if (!s) return;
     const { p, d } = s, post = U.post, tz = zona(post), ms = uredajMs();
     const ljeto = post.ljetno;
-    zaglavlje(`${pad(p.h)}:${pad(p.min)}  ${p.wd} ${p.d}.${p.m}.`, `${fmtOffset(offsetMin(ms, tz))} ${ljeto ? "ljetno" : "zimsko"}`);
+    zaglavlje(`${pad(p.h)}:${pad(p.min)}  ${p.wd} ${p.d}/${p.m}`, `${fmtOffset(offsetMin(ms, tz))} ${ljeto ? "DST" : "std"}`);
     for (let k = 0; k < 3; k++) { c.fillStyle = k === U.stranica ? FG : "#1f3138"; c.fillRect(W - 7, 70 + k * 12, 3, 8); }
 
     if (U.stranica === 0) {
-        tekst(skrati(post.nacin === "sunce" ? "☀ SUNCE · " + post.staniste.regija : `⏱ RUČNO · ${trenutnaSekcija(post.rucno, p.h * 60 + p.min).sad.ime}`, W - 40, 13), 12, 48, { px: 13, boja: DIM });
+        tekst(skrati(post.nacin === "sunce" ? "☀ SUN · " + post.staniste.regija : `⏱ MANUAL · ${trenutnaSekcija(post.rucno, p.h * 60 + p.min).sad.ime}`, W - 40, 13), 12, 48, { px: 13, boja: DIM });
         tekst(`${Math.round(s.j)} %`, 12, 86, { px: 30, b: true });
-        tekst(s.j > 0.5 ? `${Math.round(s.k / 100) * 100} K` : "noć", W - 20, 86, { px: 22, b: true, align: "right", boja: s.j > 0.5 ? FG : DIM });
+        tekst(s.j > 0.5 ? `${Math.round(s.k / 100) * 100} K` : "night", W - 20, 86, { px: 22, b: true, align: "right", boja: s.j > 0.5 ? FG : DIM });
         // mini krivulja
         const x0 = 12, x1 = W - 20, yb = 160, hh = 56, max = Math.max(1, post.nacin === "sunce" ? post.sunce.max_jacina : Math.max(...post.rucno.sekcije.map(x => x.jacina)));
         const X = min => x0 + (x1 - x0) * min / 1440, Y = j => yb - hh * j / max;
@@ -913,62 +913,62 @@ function crtajGlavni() {
         c.beginPath(); c.arc(X(sadMin), Y(s.j), 3.5, 0, 7); c.fill();
         if (post.nacin === "sunce") {
             tekst(d.izlazak != null ? "↑ " + hhmm(d.izlazak) : "↑ –", 12, 182, { px: 13, boja: DIM });
-            tekst("podne " + hhmm(d.podne), W / 2, 182, { px: 13, boja: DIM, align: "center" });
+            tekst("noon " + hhmm(d.podne), W / 2, 182, { px: 13, boja: DIM, align: "center" });
             tekst(d.zalazak != null ? "↓ " + hhmm(d.zalazak) : "↓ –", W - 20, 182, { px: 13, boja: DIM, align: "right" });
         } else {
             const ts = trenutnaSekcija(post.rucno, p.h * 60 + p.min);
-            tekst("sad: " + ts.sad.ime, 12, 182, { px: 13, boja: DIM });
+            tekst("now: " + ts.sad.ime, 12, 182, { px: 13, boja: DIM });
             tekst(`→ ${ts.iduca.ime} ${ts.iduca.od}`, W - 20, 182, { px: 13, boja: DIM, align: "right" });
         }
         podnozje("");
-        tekst("▲▼ stranice · OK izbornik", W / 2, H - 1, { px: 10, boja: "#3e5a64", align: "center" });
+        tekst("▲▼ pages · OK menu", W / 2, H - 1, { px: 10, boja: "#3e5a64", align: "center" });
     } else if (U.stranica === 1) {
         const st = post.staniste, ds = d.ds;
         const l = [skrati(st.regija, W - 40, 15, true),
-            `${Math.abs(st.lat)}° ${st.lat < 0 ? "J" : "S"} · tamo je ${ds.d}.${ds.m}.`];
+            `${Math.abs(st.lat)}° ${st.lat < 0 ? "S" : "N"} · there: ${ds.d}/${ds.m}`];
         if (d.izlazak != null && d.zalazak != null) {
             const t = d.zalazak - d.izlazak;
-            l.push(`Dan traje ${Math.floor(t / 60)} h ${pad(Math.round(t % 60))} min`,
-                   `↑ ${hhmm(d.izlazak)}   ↓ ${hhmm(d.zalazak)}`, `podne ${hhmm(d.podne)} (po tvom satu)`);
-        } else l.push(d.eMax > 0 ? "Polarni dan (§3 otvoreno)" : "Polarna noć (§3 otvoreno)");
+            l.push(`Day length ${Math.floor(t / 60)} h ${pad(Math.round(t % 60))} min`,
+                   `↑ ${hhmm(d.izlazak)}   ↓ ${hhmm(d.zalazak)}`, `noon ${hhmm(d.podne)} (your clock)`);
+        } else l.push(d.eMax > 0 ? "Polar day (§3 open)" : "Polar night (§3 open)");
         l.forEach((t, k) => tekst(t, 12, 52 + k * 24, { px: 15, b: k === 0, boja: k > 2 ? DIM : FG }));
-        podnozje("▲▼ stranice   OK izbornik");
+        podnozje("▲▼ pages   OK menu");
     } else {
-        tekst("IZLAZ NA TRAKU (PWM)", 12, 50, { px: 13, b: true, boja: DIM });
-        [["toplo  WW", s.ww], ["hladno CW", s.cw]].forEach(([ime, v], k) => {
+        tekst("OUTPUT TO STRIP (PWM)", 12, 50, { px: 13, b: true, boja: DIM });
+        [["warm  WW", s.ww], ["cool  CW", s.cw]].forEach(([ime, v], k) => {
             const y = 82 + k * 40;
             tekst(ime, 12, y, { px: 15 });
             c.fillStyle = "#1c2a30"; c.fillRect(120, y - 13, 200, 14);
             c.fillStyle = FG; c.fillRect(120, y - 13, 200 * v / 100, 14);
             tekst(Math.round(v) + " %", W - 14, y, { px: 15, b: true, align: "right" });
         });
-        tekst("omjer = boja, zbroj = jačina", 12, 160, { px: 13, boja: DIM });
-        podnozje("▲▼ stranice   OK izbornik");
+        tekst("ratio = color, sum = brightness", 12, 160, { px: 13, boja: DIM });
+        podnozje("▲▼ pages   OK menu");
     }
 }
 
 function izbornik(index = 0) {
     const post = U.post;
     const stavke = [
-        ["Način rada", () => post.nacin === "sunce" ? "Sunce staništa" : "Ručni raspored", () =>
+        ["Mode", () => post.nacin === "sunce" ? "Habitat sun" : "Manual mode", () =>
             korakNacin(post.nacin, n => { post.nacin = n; (n === "sunce" ? korakSunce : korakRucno)(post[n], x => { post[n] = x; izbornik(0); }); })],
-        ["Jačina i boja", () => post.nacin === "sunce" ? `do ${post.sunce.max_jacina} % · ${post.sunce.kelvin_min}–${post.sunce.kelvin_max} K` : `${post.rucno.sekcije.length} dijelova dana · prijelaz ${post.rucno.prijelaz_min} min`, () =>
+        ["Brightness & color", () => post.nacin === "sunce" ? `up to ${post.sunce.max_jacina} % · ${post.sunce.kelvin_min}–${post.sunce.kelvin_max} K` : `${post.rucno.sekcije.length} phases · fade ${post.rucno.prijelaz_min} min`, () =>
             post.nacin === "sunce" ? korakSunce(post.sunce, x => { post.sunce = x; izbornik(1); }) : korakRucno(post.rucno, x => { post.rucno = x; izbornik(1); })],
-        ["Stanište", () => post.staniste.regija, () => korakStaniste(post.staniste.regija, x => { post.staniste = x; izbornik(2); })],
-        ["Sezona", () => mjULabel(Math.round(post.pomak_dana / 30.44)), () => korakSezona(post.pomak_dana, x => { post.pomak_dana = x; izbornik(3); }, "", post.staniste.lat, post.dom.lat)],
-        ["Gdje živim", () => post.dom.mjesto, () => korakDrzava(post.dom.mjesto, x => { post.dom = x; izbornik(4); })],
-        ["Ljetno vrijeme", () => post.ljetno ? "DA — sat +1 h (OK = isključi)" : "NE — zimsko (OK = uključi)", () => {
+        ["Habitat", () => post.staniste.regija, () => korakStaniste(post.staniste.regija, x => { post.staniste = x; izbornik(2); })],
+        ["Season", () => mjULabel(Math.round(post.pomak_dana / 30.44)), () => korakSezona(post.pomak_dana, x => { post.pomak_dana = x; izbornik(3); }, "", post.staniste.lat, post.dom.lat)],
+        ["Where I live", () => post.dom.mjesto, () => korakDrzava(post.dom.mjesto, x => { post.dom = x; izbornik(4); })],
+        ["Daylight saving", () => post.ljetno ? "ON — clock +1 h (OK = turn off)" : "OFF — standard (OK = turn on)", () => {
             post.ljetno = !post.ljetno; izbornik(5);
         }],
-        ["Sat i datum", () => "ako sat kasni ili žuri", () => {
+        ["Clock & date", () => "if the clock is fast or slow", () => {
             const p = dijelovi(uredajMs(), zona(post));
             korakDatum(p, dt => korakSat(p, sat => { namjestiSat(dt, sat, zona(post)); izbornik(6); }, "2/2"), "1/2");
         }],
-        ["Iz kutije", () => "obriši sve postavke", () => postavi(ekranLista({ naslov: "OBRISATI SVE?", stavke: ["Ne", "Da, obriši sve"],
+        ["Factory reset", () => "erase all settings", () => postavi(ekranLista({ naslov: "ERASE EVERYTHING?", stavke: ["No", "Yes, erase all"],
             onOk: k => k ? tvornicki() : izbornik(7) }))],
-        ["← Natrag", () => "na glavni ekran", () => glavni()],
+        ["← Back", () => "to main screen", () => glavni()],
     ];
-    postavi(ekranLista({ naslov: "IZBORNIK", stavke: stavke.map(s => s[0]), index,
+    postavi(ekranLista({ naslov: "MENU", stavke: stavke.map(s => s[0]), index,
         opis: k => stavke[k][1](), onOk: k => stavke[k][2](), natrag: () => { glavni(); return true; } }), true);
 }
 function tvornicki() {
@@ -1037,7 +1037,7 @@ function osvjeziPanele() {
     // doba dana: vrijeme uređaja (ili pravo vrijeme dok sat nije namješten)
     const tz = tzUredaja(), p = dijelovi(U.satOk ? uredajMs() : SIM.ms, tz);
     $("#doba-sat").textContent = `${pad(p.h)}:${pad(p.min)}`;
-    $("#doba-datum").textContent = `${p.wd} ${p.d}.${p.m}.${p.y}.` + (U.satOk ? "" : " · sat nije namješten");
+    $("#doba-datum").textContent = `${p.wd} ${p.d}/${p.m}/${p.y}` + (U.satOk ? "" : " · clock not set");
     if (!vucem) $("#klizac").value = p.h * 60 + p.min;
 }
 
@@ -1083,5 +1083,4 @@ function petlja(t) {
 pocetak();
 requestAnimationFrame(petlja);
 </script>
-
 </html>
