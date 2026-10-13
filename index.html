@@ -47,7 +47,7 @@ header p { margin: 2px 0 0; color: var(--prigušeno); font-size: .88rem; }
            display: flex; gap: 14px; align-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 30px rgba(0,0,0,.25); }
 .bezel { background: #050808; border-radius: 10px; padding: 8px; flex: 1; min-width: 0;
          box-shadow: inset 0 0 0 1px #000, inset 0 2px 6px rgba(0,0,0,.8); }
-#ekran { display: block; width: 100%; max-width: 100%; aspect-ratio: 2 / 1; border-radius: 4px; }
+#ekran { display: block; width: 100%; max-width: 100%; aspect-ratio: 4 / 3; border-radius: 4px; }
 .natpis { color: #8d9792; font-size: .68rem; letter-spacing: .14em; text-align: center; margin-top: 8px; }
 .tipke { display: flex; flex-direction: column; gap: 12px; align-items: center; }
 .tipka { width: 50px; height: 50px; border-radius: 50%; border: none; cursor: pointer; padding: 0;
@@ -98,7 +98,7 @@ header p { margin: 2px 0 0; color: var(--prigušeno); font-size: .88rem; }
             <h2>Device</h2>
             <div class="kucište">
                     <div style="flex:1;min-width:0">
-                        <div class="bezel"><canvas id="ekran" width="400" height="200"></canvas></div>
+                        <div class="bezel"><canvas id="ekran" width="320" height="240"></canvas></div>
                         <div class="natpis">EXOTICSWITCH</div>
                     </div>
                     <div class="tipke">
@@ -549,7 +549,7 @@ function svjetloSad() {
 
 // ---------- crtanje ekrana ----------
 const cv = $("#ekran"), c = cv.getContext("2d");
-const W = 400, H = 200, FG = "#d8f3ff", DIM = "#6f97a6", BG = "#020607";
+const W = 320, H = 240, FG = "#d8f3ff", DIM = "#6f97a6", BG = "#020607";
 (function () { const r = window.devicePixelRatio || 1; cv.width = W * r; cv.height = H * r; c.setTransform(r, 0, 0, r, 0, 0); })();
 const F = (px, b) => `${b ? "700 " : ""}${px}px "SF Mono", Menlo, Consolas, monospace`;
 function tekst(s, x, y, o = {}) {
@@ -563,7 +563,7 @@ function skrati(s, maxW, px, b) {
     return s + "…";
 }
 function zaglavlje(lijevo, desno) {
-    tekst(skrati(lijevo, 250, 13, true), 12, 20, { px: 13, b: true });
+    tekst(skrati(lijevo, 200, 13, true), 12, 20, { px: 13, b: true });
     if (desno) tekst(desno, W - 12, 20, { px: 13, align: "right", boja: DIM });
     c.fillStyle = DIM; c.fillRect(12, 27, W - 24, 1);
 }
@@ -573,7 +573,7 @@ const podnozje = s => tekst(s, W / 2, H - 9, { px: 12, boja: DIM, align: "center
 function ekranLista({ naslov, korak, stavke: st, index = 0, opis, onOk, hint, natrag, pregled }) {
     let i = index;
     const L = () => typeof st === "function" ? st() : st;
-    const VID = 4;
+    const VID = 6;
     return {
         crtaj() {
             zaglavlje(naslov, korak);
@@ -613,7 +613,7 @@ function ekranBrojevi({ naslov, korak, polja, predlozak, napomena, onOk, pregled
     return {
         crtaj() {
             zaglavlje(naslov, korak);
-            const yy = predlozak.length > 2 ? 30 : 38, y0 = predlozak.length > 2 ? 52 : 66;
+            const yy = predlozak.length > 2 ? 34 : 44, y0 = predlozak.length > 2 ? 58 : 76;
             predlozak.forEach((red, ri) => {
                 const px = predlozak.length > 2 ? 18 : 24, y = y0 + ri * yy;
                 c.font = F(px, true);
@@ -648,7 +648,7 @@ function ekranInfo({ naslov, korak, linije, onOk, hint, upozorenje, natrag }) {
             zaglavlje(naslov, korak);
             linije().forEach((l, k) => {
                 const o = typeof l === "string" ? { t: l } : l;
-                tekst(skrati(o.t, W - 24, o.px || 15, o.b), o.centar ? W / 2 : 12, 52 + k * 22,
+                tekst(skrati(o.t, W - 24, o.px || 15, o.b), o.centar ? W / 2 : 12, 58 + k * 26,
                     { px: o.px || 15, b: o.b, boja: o.dim ? DIM : (upozorenje && k === 0 ? "#ffd27a" : FG), align: o.centar ? "center" : "left" });
             });
             podnozje(hint || "OK next");
@@ -744,7 +744,7 @@ function korakSezona(poc, gotovo, korak, latSt, latDom) {
             // graf
             const god = godina(p.y, latDom, latSt, pomak), sve = god.flatMap(t => [t.doma, t.tamo]).filter(v => v != null);
             const lo = Math.floor(Math.min(...sve) - 0.5), hi = Math.ceil(Math.max(...sve) + 0.5);
-            const x0 = 40, x1 = W - 12, yT = 66, yB = 148;
+            const x0 = 40, x1 = W - 12, yT = 74, yB = 172;
             const X = d => x0 + (x1 - x0) * (d - 1) / 364, Y = h => yB - (yB - yT) * (h - lo) / Math.max(1, hi - lo);
             c.fillStyle = "#1c2a30"; c.fillRect(x0, yB, x1 - x0, 1); c.fillRect(x0, yT, 1, yB - yT);
             tekst(hi + "h", x0 - 4, yT + 8, { px: 11, boja: DIM, align: "right" });
@@ -759,7 +759,7 @@ function korakSezona(poc, gotovo, korak, latSt, latDom) {
             const danas = danUGodini(p.y, p.m, p.d);
             c.fillStyle = DIM; c.fillRect(X(danas), yT, 1, yB - yT);
             const dd = god.reduce((a, t) => Math.abs(t.doy - danas) < Math.abs(a.doy - danas) ? t : a);
-            tekst((latDom != null ? `— home ${fmtH(dd.doma)}   ` : "") + `- - there ${fmtH(dd.tamo)}`, 12, 178, { px: 12 });
+            tekst((latDom != null ? `— home ${fmtH(dd.doma)}   ` : "") + `- - there ${fmtH(dd.tamo)}`, 12, 206, { px: 12 });
             podnozje("▲▼ shift · OK confirm · ← back");
         },
         gore() { mj = Math.min(6, mj + 1); },
@@ -900,7 +900,7 @@ function crtajGlavni() {
         tekst(`${Math.round(s.j)} %`, 12, 86, { px: 30, b: true });
         tekst(s.j > 0.5 ? `${Math.round(s.k / 100) * 100} K` : "night", W - 20, 86, { px: 22, b: true, align: "right", boja: s.j > 0.5 ? FG : DIM });
         // mini krivulja
-        const x0 = 12, x1 = W - 20, yb = 160, hh = 56, max = Math.max(1, post.nacin === "sunce" ? post.sunce.max_jacina : Math.max(...post.rucno.sekcije.map(x => x.jacina)));
+        const x0 = 12, x1 = W - 20, yb = 192, hh = 64, max = Math.max(1, post.nacin === "sunce" ? post.sunce.max_jacina : Math.max(...post.rucno.sekcije.map(x => x.jacina)));
         const X = min => x0 + (x1 - x0) * min / 1440, Y = j => yb - hh * j / max;
         const sadMin = p.h * 60 + p.min;
         c.beginPath(); c.moveTo(X(0), yb);
@@ -912,16 +912,16 @@ function crtajGlavni() {
         c.fillStyle = FG; c.fillRect(X(sadMin) - 0.5, yb - hh - 4, 1.5, hh + 6);
         c.beginPath(); c.arc(X(sadMin), Y(s.j), 3.5, 0, 7); c.fill();
         if (post.nacin === "sunce") {
-            tekst(d.izlazak != null ? "↑ " + hhmm(d.izlazak) : "↑ –", 12, 182, { px: 13, boja: DIM });
-            tekst("noon " + hhmm(d.podne), W / 2, 182, { px: 13, boja: DIM, align: "center" });
-            tekst(d.zalazak != null ? "↓ " + hhmm(d.zalazak) : "↓ –", W - 20, 182, { px: 13, boja: DIM, align: "right" });
+            tekst(d.izlazak != null ? "↑ " + hhmm(d.izlazak) : "↑ –", 12, 216, { px: 13, boja: DIM });
+            tekst("noon " + hhmm(d.podne), W / 2, 216, { px: 13, boja: DIM, align: "center" });
+            tekst(d.zalazak != null ? "↓ " + hhmm(d.zalazak) : "↓ –", W - 20, 216, { px: 13, boja: DIM, align: "right" });
         } else {
             const ts = trenutnaSekcija(post.rucno, p.h * 60 + p.min);
-            tekst("now: " + ts.sad.ime, 12, 182, { px: 13, boja: DIM });
-            tekst(`→ ${ts.iduca.ime} ${ts.iduca.od}`, W - 20, 182, { px: 13, boja: DIM, align: "right" });
+            tekst("now: " + ts.sad.ime, 12, 216, { px: 13, boja: DIM });
+            tekst(`→ ${ts.iduca.ime} ${ts.iduca.od}`, W - 20, 216, { px: 13, boja: DIM, align: "right" });
         }
         podnozje("");
-        tekst("▲▼ pages · OK menu", W / 2, H - 1, { px: 10, boja: "#3e5a64", align: "center" });
+        tekst("▲▼ pages · OK menu", W / 2, H - 2, { px: 10, boja: "#3e5a64", align: "center" });
     } else if (U.stranica === 1) {
         const st = post.staniste, ds = d.ds;
         const l = [skrati(st.regija, W - 40, 15, true),
@@ -931,18 +931,18 @@ function crtajGlavni() {
             l.push(`Day length ${Math.floor(t / 60)} h ${pad(Math.round(t % 60))} min`,
                    `↑ ${hhmm(d.izlazak)}   ↓ ${hhmm(d.zalazak)}`, `noon ${hhmm(d.podne)} (your clock)`);
         } else l.push(d.eMax > 0 ? "Polar day (§3 open)" : "Polar night (§3 open)");
-        l.forEach((t, k) => tekst(t, 12, 52 + k * 24, { px: 15, b: k === 0, boja: k > 2 ? DIM : FG }));
+        l.forEach((t, k) => tekst(t, 12, 58 + k * 28, { px: 15, b: k === 0, boja: k > 2 ? DIM : FG }));
         podnozje("▲▼ pages   OK menu");
     } else {
         tekst("OUTPUT TO STRIP (PWM)", 12, 50, { px: 13, b: true, boja: DIM });
         [["warm  WW", s.ww], ["cool  CW", s.cw]].forEach(([ime, v], k) => {
-            const y = 82 + k * 40;
+            const y = 90 + k * 44;
             tekst(ime, 12, y, { px: 15 });
-            c.fillStyle = "#1c2a30"; c.fillRect(120, y - 13, 200, 14);
-            c.fillStyle = FG; c.fillRect(120, y - 13, 200 * v / 100, 14);
+            c.fillStyle = "#1c2a30"; c.fillRect(100, y - 13, 150, 14);
+            c.fillStyle = FG; c.fillRect(100, y - 13, 150 * v / 100, 14);
             tekst(Math.round(v) + " %", W - 14, y, { px: 15, b: true, align: "right" });
         });
-        tekst("ratio = color, sum = brightness", 12, 160, { px: 13, boja: DIM });
+        tekst("ratio = color, sum = brightness", 12, 180, { px: 13, boja: DIM });
         podnozje("▲▼ pages   OK menu");
     }
 }
