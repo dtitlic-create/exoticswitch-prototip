@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="hr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ExoticSwitch uređaj</title>
+<style>
+/* raspored: uređaj i terarij jedan pored drugog, na mobitelu jedno ispod drugog; ispod klizač doba dana */
+:root {
+    --pozadina: #f6f5f1;
+    --kartica: #ffffff;
+    --tekst: #1f2a24;
+    --prigušeno: #5b6b61;
+    --naglasak: #2f6b4f;
+    --mreza: #e3e2dd;
+    --sjena: 0 1px 2px rgba(31,42,36,.06), 0 8px 24px rgba(31,42,36,.07);
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --pozadina: #141a17; --kartica: #1b2320; --tekst: #e6ebe7; --prigušeno: #9aa9a0;
+        --naglasak: #7cc4a0; --mreza: #2a332f; --sjena: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+        color-scheme: dark;
+    }
+}
+:root[data-theme="dark"] {
+    --pozadina: #141a17; --kartica: #1b2320; --tekst: #e6ebe7; --prigušeno: #9aa9a0;
+    --naglasak: #7cc4a0; --mreza: #2a332f; --sjena: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    background: var(--pozadina);
+    color: var(--tekst);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+}
+.okvir { max-width: 1060px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 16px; }
+header h1 { margin: 0; color: var(--naglasak); font-size: 1.35rem; text-wrap: balance; }
+header p { margin: 2px 0 0; color: var(--prigušeno); font-size: .88rem; }
+.mreza { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.kartica { background: var(--kartica); border-radius: 16px; padding: 16px; box-shadow: var(--sjena); min-width: 0; }
+.kartica h2 { margin: 0 0 12px; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--prigušeno); }
+
+/* ---- uređaj ---- */
+.kucište { background: linear-gradient(160deg, #3a403d, #222725); border-radius: 22px; padding: 16px;
+           display: flex; gap: 14px; align-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 30px rgba(0,0,0,.25); }
+.bezel { background: #050808; border-radius: 10px; padding: 8px; flex: 1; min-width: 0;
+         box-shadow: inset 0 0 0 1px #000, inset 0 2px 6px rgba(0,0,0,.8); }
+#ekran { display: block; width: 100%; max-width: 100%; aspect-ratio: 2 / 1; border-radius: 4px; }
+.natpis { color: #8d9792; font-size: .68rem; letter-spacing: .14em; text-align: center; margin-top: 8px; }
+.tipke { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.tipka { width: 50px; height: 50px; border-radius: 50%; border: none; cursor: pointer; padding: 0;
+         touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+         -webkit-tap-highlight-color: transparent;
+         background: radial-gradient(circle at 35% 30%, #5b625f, #2b302e 70%); color: #cfd8d3; font: 600 1.1rem/1 -apple-system, sans-serif;
+         box-shadow: 0 3px 0 #111, 0 4px 10px rgba(0,0,0,.4); transition: transform .05s, box-shadow .05s; }
+.tipka:focus-visible { outline: 2px solid #7cc4a0; outline-offset: 3px; }
+.tipka.ok { font-size: .8rem; letter-spacing: .05em; background: radial-gradient(circle at 35% 30%, #4f7a66, #24392f 70%); }
+.tipka.natrag { margin-top: 6px; background: radial-gradient(circle at 35% 30%, #6b5a4b, #3a2f27 70%); }
+.tipka.pritisnuta { transform: translateY(2px); box-shadow: 0 1px 0 #111, 0 2px 4px rgba(0,0,0,.4); }
+.savjet { margin: 12px 0 0; font-size: .82rem; color: var(--prigušeno); }
+
+/* ---- terarij ---- */
+.terarij { display: block; width: 100%; max-width: 100%; height: auto; border-radius: 12px; }
+.terarij .prijelaz { transition: opacity .4s, fill .4s, stop-color .4s; }
+
+/* ---- doba dana ---- */
+.doba { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; align-items: center; }
+.doba .sat { font-size: 1.6rem; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.doba .datum { font-size: .8rem; color: var(--prigušeno); }
+#klizac { width: 100%; accent-color: var(--naglasak); height: 32px; }
+.oznake { grid-column: 2; display: flex; justify-content: space-between; font-size: .72rem; color: var(--prigušeno); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 760px) {
+    .mreza { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 520px) {
+    .kucište { flex-direction: column; padding: 12px; gap: 12px; }
+    .bezel { width: 100%; }
+    .tipke { flex-direction: row; justify-content: center; gap: 14px; }
+    .tipka { width: 56px; height: 56px; }
+    .tipka.natrag { margin: 0 0 0 8px; }
+    .doba { grid-template-columns: 1fr; }
+    .oznake { grid-column: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .terarij .prijelaz, .tipka { transition: none; } }
+</style>
+
+<div class="okvir">
+    <header>
+        <h1>ExoticSwitch</h1>
+        <p>Prototip uređaja za svjetlo u terariju. Namjesti ga tipkama i gledaj kako se mijenja svjetlo.</p>
+    </header>
+
+    <div class="mreza">
+        <section class="kartica" aria-label="Uređaj">
+            <h2>Uređaj</h2>
+            <div class="kucište">
+                    <div style="flex:1;min-width:0">
+                        <div class="bezel"><canvas id="ekran" width="400" height="200"></canvas></div>
+                        <div class="natpis">EXOTICSWITCH</div>
+                    </div>
+                    <div class="tipke">
+                        <button class="tipka" id="t-gore" aria-label="Gore">▲</button>
+                        <button class="tipka ok" id="t-ok" aria-label="Potvrdi">OK</button>
+                        <button class="tipka" id="t-dolje" aria-label="Dolje">▼</button>
+                        <button class="tipka natrag" id="t-natrag" aria-label="Natrag">←</button>
+                    </div>
+                </div>
+            <p class="savjet">Drži ▲ ili ▼ za brže listanje. ← vraća jedan korak.</p>
+        </section>
+
+        <section class="kartica" aria-label="Terarij">
+            <h2>Terarij</h2>
+            <svg class="terarij" viewBox="0 0 480 300" role="img" aria-label="Terarij pod svjetlom">
+                        <defs>
+                            <clipPath id="unutra"><rect x="16" y="44" width="448" height="236"/></clipPath>
+                            <linearGradient id="g-zid" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#6a5747"/><stop offset="1" stop-color="#3b2f26"/>
+                            </linearGradient>
+                            <linearGradient id="g-tlo" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#9a7448"/><stop offset="1" stop-color="#5e4329"/>
+                            </linearGradient>
+                            <linearGradient id="g-konus" x1="0" y1="0" x2="0" y2="1">
+                                <stop id="konus-1" class="prijelaz" offset="0" stop-color="#fff" stop-opacity="0"/>
+                                <stop id="konus-2" class="prijelaz" offset="1" stop-color="#fff" stop-opacity="0"/>
+                            </linearGradient>
+                            <linearGradient id="g-alu" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#c9d0cd"/><stop offset="1" stop-color="#7d8682"/>
+                            </linearGradient>
+                            <linearGradient id="g-kam" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#7d6a58"/><stop offset="1" stop-color="#4f4034"/>
+                            </linearGradient>
+                            <radialGradient id="g-voda" cx=".45" cy=".4" r=".7">
+                                <stop offset="0" stop-color="#9cc9d8"/><stop offset="1" stop-color="#4b7d8f"/>
+                            </radialGradient>
+                            <linearGradient id="g-kam2" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#8a7965"/><stop offset="1" stop-color="#5a4a3c"/>
+                            </linearGradient>
+                            <pattern id="mrezica" width="6" height="6" patternUnits="userSpaceOnUse">
+                                <path d="M0 0H6M0 0V6" stroke="#3a4240" stroke-width="1"/>
+                            </pattern>
+                            <filter id="mekano" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="5"/></filter>
+                            <filter id="sjena" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+                        </defs>
+
+                        <!-- kućište -->
+                        <rect x="4" y="4" width="472" height="292" rx="12" fill="#161b19"/>
+                        <rect x="10" y="10" width="460" height="30" rx="4" fill="url(#mrezica)"/>
+                        <rect x="10" y="10" width="460" height="30" rx="4" fill="none" stroke="#2c3431"/>
+
+                        <g clip-path="url(#unutra)">
+                            <!-- stražnji zid od kamena -->
+                            <rect x="16" y="44" width="448" height="236" fill="url(#g-zid)"/>
+                            <g fill="url(#g-kam)" stroke="#2f261f" stroke-width="1.5" stroke-linejoin="round">
+                                <path d="M16 60 L70 52 L104 78 L96 128 L52 140 L16 126Z"/>
+                                <path d="M104 78 L170 58 L214 84 L206 132 L150 146 L96 128Z"/>
+                                <path d="M214 84 L280 62 L330 90 L318 140 L262 150 L206 132Z"/>
+                                <path d="M330 90 L392 64 L464 76 L464 140 L404 152 L318 140Z"/>
+                                <path d="M16 126 L52 140 L64 196 L16 214Z"/>
+                                <path d="M52 140 L150 146 L160 204 L90 214 L64 196Z"/>
+                                <path d="M150 146 L262 150 L270 208 L160 204Z"/>
+                                <path d="M262 150 L404 152 L410 210 L270 208Z"/>
+                                <path d="M404 152 L464 140 L464 214 L410 210Z"/>
+                            </g>
+                            <g stroke="#a8927a" stroke-opacity=".25" stroke-width="2" fill="none" stroke-linecap="round">
+                                <path d="M74 64 L98 82"/><path d="M178 66 L206 86"/><path d="M286 70 L320 92"/><path d="M398 72 L440 80"/>
+                                <path d="M70 150 L96 160"/><path d="M176 156 L210 162"/><path d="M290 160 L330 164"/>
+                            </g>
+
+                            <!-- puzavica lijevo -->
+                            <path d="M40 44 C 46 80, 30 110, 44 150 S 40 200, 52 230" stroke="#2f5a2c" stroke-width="2.5" fill="none"/>
+                            <g fill="#4f8f46" stroke="#2f5a2c" stroke-width="1">
+                                <path d="M44 70 c-14 -4 -20 6 -14 14 c8 4 14 -2 14 -14z"/>
+                                <path d="M40 100 c14 -6 22 4 16 12 c-8 4 -16 -2 -16 -12z"/>
+                                <path d="M42 132 c-16 -2 -20 10 -12 16 c8 2 14 -4 12 -16z"/>
+                                <path d="M44 164 c14 -4 20 8 12 14 c-8 2 -14 -4 -12 -14z"/>
+                                <path d="M46 198 c-14 0 -18 12 -10 16 c8 2 12 -6 10 -16z"/>
+                            </g>
+
+                            <!-- biljka desno -->
+                            <g stroke="#2c5a2a" stroke-width="1.2">
+                                <path d="M424 262 C 420 220, 404 196, 380 180" fill="none" stroke-width="3"/>
+                                <path d="M428 262 C 432 214, 446 192, 462 178" fill="none" stroke-width="3"/>
+                                <path d="M426 262 C 426 216, 424 190, 420 160" fill="none" stroke-width="3"/>
+                                <path d="M380 180 c-26 -8 -40 10 -30 22 c14 6 28 -4 30 -22z" fill="#5c9e4c"/>
+                                <path d="M462 178 c18 -14 34 -4 30 10 c-10 10 -26 6 -30 -10z" fill="#4f8f46"/>
+                                <path d="M420 160 c-10 -24 4 -40 18 -32 c8 12 0 28 -18 32z" fill="#67a957"/>
+                                <path d="M404 206 c-24 4 -28 22 -14 28 c14 0 20 -12 14 -28z" fill="#4f8f46"/>
+                                <path d="M444 206 c22 -6 30 10 20 20 c-12 4 -22 -4 -20 -20z" fill="#5c9e4c"/>
+                            </g>
+
+                            <!-- svjetlosni stožac od trake -->
+                            <polygon class="prijelaz" points="60,44 420,44 470,280 10,280" fill="url(#g-konus)"/>
+
+                            <!-- tlo -->
+                            <path d="M16 244 C 90 232, 160 242, 240 238 S 380 230, 464 240 L464 280 L16 280Z" fill="url(#g-tlo)"/>
+                            <path d="M16 244 C 90 232, 160 242, 240 238 S 380 230, 464 240" stroke="#b48b5c" stroke-width="2" fill="none" opacity=".6"/>
+                            <g fill="#6b5a4c">
+                                <ellipse cx="120" cy="258" rx="7" ry="4"/><ellipse cx="200" cy="266" rx="5" ry="3"/>
+                                <ellipse cx="300" cy="262" rx="8" ry="4"/><ellipse cx="250" cy="272" rx="4" ry="2.5"/>
+                                <ellipse cx="90" cy="270" rx="5" ry="3"/>
+                            </g>
+                            <!-- kamen za grijanje -->
+                            <path d="M140 252 C 146 232, 196 228, 214 248 C 206 258, 152 260, 140 252Z" fill="url(#g-kam2)" stroke="#3b3027" stroke-width="1.5"/>
+
+                            <!-- posuda s vodom -->
+                            <ellipse cx="350" cy="262" rx="38" ry="10" fill="#000" opacity=".25" filter="url(#sjena)"/>
+                            <ellipse cx="350" cy="254" rx="36" ry="11" fill="#5b6a6d" stroke="#3c4648" stroke-width="1.5"/>
+                            <ellipse cx="350" cy="252" rx="29" ry="7" fill="url(#g-voda)"/>
+                            <path d="M332 250 q8 -3 16 0" stroke="#e6f4f8" stroke-opacity=".7" stroke-width="1.5" fill="none"/>
+
+                            <!-- sjena grane -->
+                            <path d="M30 274 C 130 254, 190 228, 262 226 S 390 196, 470 178" stroke="#000" stroke-opacity=".25" stroke-width="12" fill="none" filter="url(#sjena)"/>
+                            <!-- grana -->
+                            <path d="M20 270 C 120 238, 180 198, 252 194 S 384 156, 472 136" stroke="#4a3220" stroke-width="15" stroke-linecap="round" fill="none"/>
+                            <path d="M20 270 C 120 238, 180 198, 252 194 S 384 156, 472 136" stroke="#7a5536" stroke-width="10" stroke-linecap="round" fill="none"/>
+                            <path d="M40 260 C 120 232, 180 194, 252 190 S 384 152, 470 132" stroke="#9b7150" stroke-width="2" fill="none" opacity=".7"/>
+                            <path d="M318 172 C 330 150, 348 140, 362 122" stroke="#6b4a2e" stroke-width="6" stroke-linecap="round" fill="none"/>
+                            <path d="M150 220 C 146 206, 134 196, 120 190" stroke="#6b4a2e" stroke-width="5" stroke-linecap="round" fill="none"/>
+
+                            <!-- kameleon na grani -->
+                            <g id="kameleon" transform="translate(66 -14)">
+                                <path d="M205 196 C 196 206, 186 220, 194 230 C 202 238, 214 228, 207 220 C 203 215, 198 219, 201 223" stroke="#3f8a45" stroke-width="5" stroke-linecap="round" fill="none"/>
+                                <path d="M204 194 C 208 172, 240 160, 264 168 C 276 172, 280 184, 270 190 C 254 196, 222 198, 204 194Z" fill="#4f9d50" stroke="#2f6a33" stroke-width="1.5"/>
+                                <path d="M214 186 C 228 178, 248 176, 266 180" stroke="#9fd17a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                                <path d="M224 172 l4 -6 l4 6 l4 -7 l4 7 l4 -6 l4 6 l4 -5" stroke="#2f6a33" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+                                <path d="M262 168 C 268 152, 286 150, 296 164 C 300 172, 294 182, 282 184 C 274 186, 266 180, 262 168Z" fill="#5aab5a" stroke="#2f6a33" stroke-width="1.5"/>
+                                <path d="M266 166 C 270 156, 280 152, 288 156" stroke="#2f6a33" stroke-width="1.5" fill="none"/>
+                                <circle cx="284" cy="168" r="6" fill="#7cc06a" stroke="#2f6a33" stroke-width="1.5"/>
+                                <circle cx="285.5" cy="167.5" r="2.2" fill="#10200f"/>
+                                <path d="M296 172 q-6 3 -12 2" stroke="#2f6a33" stroke-width="1.2" fill="none"/>
+                                <g stroke="#3f8a45" stroke-width="4.5" stroke-linecap="round" fill="none">
+                                    <path d="M220 192 L214 202 L208 204"/><path d="M228 194 L230 204 L236 206"/>
+                                    <path d="M256 190 L252 200 L246 202"/><path d="M262 188 L266 198 L272 197"/>
+                                </g>
+                            </g>
+
+                            <!-- boja svjetla (toplo/hladno) i mrak -->
+                            <rect id="tint" class="prijelaz" x="16" y="44" width="448" height="236" fill="#fff" opacity="0" style="mix-blend-mode:multiply"/>
+                            <rect id="tama" class="prijelaz" x="16" y="44" width="448" height="236" fill="#03060d" opacity=".88"/>
+
+                            <!-- odsjaj stakla -->
+                            <polygon points="70,44 120,44 40,280 16,280 16,230" fill="#fff" opacity=".045"/>
+                            <polygon points="300,44 320,44 210,280 190,280" fill="#fff" opacity=".03"/>
+                        </g>
+
+                        <!-- staklena vrata -->
+                        <line x1="240" y1="44" x2="240" y2="280" stroke="#9fb3ad" stroke-opacity=".25" stroke-width="2"/>
+                        <rect x="226" y="150" width="4" height="24" rx="2" fill="#7f8b87"/>
+                        <rect x="250" y="150" width="4" height="24" rx="2" fill="#7f8b87"/>
+                        <rect x="16" y="44" width="448" height="236" fill="none" stroke="#2c3431" stroke-width="2"/>
+                        <rect x="4" y="280" width="472" height="16" rx="4" fill="#161b19"/>
+                        <rect x="16" y="284" width="448" height="6" rx="3" fill="#232a27"/>
+
+                        <!-- LED traka u aluminijskom profilu -->
+                        <rect id="led-sjaj" class="prijelaz" x="56" y="40" width="368" height="10" rx="5" fill="#fff" opacity="0" filter="url(#mekano)"/>
+                        <rect x="52" y="38" width="376" height="9" rx="3" fill="url(#g-alu)"/>
+                        <rect id="led" class="prijelaz" x="56" y="44" width="368" height="4" rx="2" fill="#3a3f3d"/>
+                    </svg>
+        </section>
+    </div>
+
+    <section class="kartica" aria-label="Doba dana">
+        <h2>Doba dana</h2>
+        <div class="doba">
+            <div><div class="sat" id="doba-sat">–</div><div class="datum" id="doba-datum">–</div></div>
+            <input type="range" id="klizac" min="0" max="1439" step="1" value="720" aria-label="Doba dana">
+            <div class="oznake"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
+        </div>
+    </section>
+</div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const rad = d => d * Math.PI / 180;
+const deg = r => r * 180 / Math.PI;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const pad = n => String(n).padStart(2, "0");
+const DAN_MS = 864e5;
+
+// ================= PODACI =================
+// dom: kategorija → [ime, lon, zimsko vrijeme kao pomak od UTC-a u satima, lat] (skraćeni popis)
+const DOM = [
+    ["Europa", [
+        ["Hrvatska", 16.0, 1, 45.5], ["Bosna i Hercegovina", 17.8, 1, 44.0],
+        ["Srbija", 20.9, 1, 44.2], ["Slovenija", 14.8, 1, 46.1],
+        ["Crna Gora", 19.3, 1, 42.6], ["Sjeverna Makedonija", 21.7, 1, 41.6],
+        ["Austrija", 14.1, 1, 47.6], ["Njemačka", 10.4, 1, 51.0],
+        ["Švicarska", 8.2, 1, 46.9], ["Italija", 12.6, 1, 42.8],
+        ["Francuska", 2.4, 1, 46.6], ["Španjolska", -3.7, 1, 40.4],
+        ["Portugal", -8.2, 0, 39.6], ["Ujedinjeno Kraljevstvo", -1.8, 0, 52.8],
+        ["Irska", -8.0, 0, 53.2], ["Nizozemska", 5.3, 1, 52.2],
+        ["Belgija", 4.5, 1, 50.6], ["Danska", 10.0, 1, 55.9],
+        ["Švedska", 16.0, 1, 59.5], ["Norveška", 10.0, 1, 60.5],
+        ["Finska", 25.7, 2, 61.5], ["Poljska", 19.4, 1, 52.0],
+        ["Češka", 15.5, 1, 49.8], ["Slovačka", 19.7, 1, 48.7],
+        ["Mađarska", 19.5, 1, 47.2], ["Rumunjska", 25.0, 2, 45.9],
+        ["Bugarska", 25.5, 2, 42.7], ["Grčka", 22.9, 2, 38.8],
+        ["Turska", 35.2, 3, 39.0], ["Rusija — Moskva", 37.6, 3, 55.8],
+    ]],
+    ["Azija", [
+        ["Izrael", 35.0, 2, 31.8], ["UAE", 54, 4, 24.5],
+        ["Indija", 79, 5.5, 22.0], ["Tajland", 101, 7, 14.0],
+        ["Malezija", 102, 8, 3.5], ["Singapur", 103.8, 8, 1.35],
+        ["Indonezija — Java", 110, 7, -7.0], ["Filipini", 121, 8, 13.0],
+        ["Kina", 113, 8, 32.0], ["Južna Koreja", 127.5, 9, 36.5],
+        ["Japan", 138, 9, 36.0],
+    ]],
+    ["Afrika", [
+        ["Maroko", -7, 1, 32.0], ["Egipat", 31.2, 2, 27.0],
+        ["Nigerija", 7.5, 1, 9.0], ["Kenija", 37, 3, -1.0],
+        ["Južna Afrika", 25, 2, -28.0],
+    ]],
+    ["Sjeverna i Srednja Amerika", [
+        ["SAD — istok", -78, -5, 39.0], ["SAD — središnji", -92, -6, 37.0],
+        ["SAD — planinski", -108, -7, 40.0], ["SAD — Arizona", -111.7, -7, 33.5],
+        ["SAD — zapad", -120, -8, 37.0], ["Kanada — istok", -75, -5, 45.0],
+        ["Kanada — zapad", -123, -8, 49.3], ["Meksiko", -99, -6, 21.0],
+    ]],
+    ["Južna Amerika", [
+        ["Kolumbija", -74, -5, 4.6], ["Peru", -76, -5, -10.0],
+        ["Brazil — jugoistok", -46.6, -3, -23.0], ["Čile", -71, -4, -33.5],
+        ["Argentina", -64, -3, -34.0],
+    ]],
+    ["Australija i Oceanija", [
+        ["Australija — istok", 149, 10, -34.0], ["Australija — Queensland", 150, 10, -24.0],
+        ["Australija — zapad", 121, 8, -32.0], ["Novi Zeland", 174, 12, -40.0],
+    ]],
+];
+
+// stanište: kategorija → [regija, lat, primjer životinja]
+const STANISTA = [
+    ["Afrika", [
+        ["Sahara, sjever Afrike", 25.0, "Uromastyx"],
+        ["Zapadna Afrika — Gana, Togo", 7.5, "Python regius"],
+        ["Istočna Afrika — Kenija, Tanzanija", -3.0, "Trioceros jacksonii"],
+    ]],
+    ["Madagaskar", [
+        ["Madagaskar — istok, kišna šuma", -18.9, "Calumma, Phelsuma"],
+        ["Madagaskar — sjever (Nosy Be)", -13.3, "panter kameleon"],
+        ["Madagaskar — jug, suha šuma", -24.0, "Astrochelys radiata"],
+    ]],
+    ["Azija i Arabija", [
+        ["Arabija — Jemen", 15.0, "Chamaeleo calyptratus"],
+        ["Srednja Azija — Pakistan", 31.0, "Eublepharis macularius"],
+        ["Jugoistočna Azija — Tajland", 14.0, "tokay gekon"],
+    ]],
+    ["Australija i Oceanija", [
+        ["Australija — središnja pustinja", -23.7, "Pogona vitticeps"],
+        ["Australija — Queensland, tropi", -17.0, "Saltuarius"],
+        ["Nova Gvineja", -6.0, "Morelia viridis"],
+        ["Nova Kaledonija", -21.5, "Correlophus ciliatus"],
+    ]],
+    ["Sjeverna i Srednja Amerika", [
+        ["SAD — jugoistok", 33.0, "Pantherophis guttatus"],
+        ["Meksiko — pustinja Sonora", 30.0, "Heloderma suspectum"],
+        ["Srednja Amerika — Kostarika", 10.0, "Agalychnis callidryas"],
+    ]],
+    ["Južna Amerika", [
+        ["Gvajana / Surinam", 5.0, "Dendrobates tinctorius"],
+        ["Amazona — Manaus", -3.1, "boe, žabe"],
+        ["Gran Chaco — Argentina, Paragvaj", -24.0, "Salvator merianae"],
+    ]],
+    ["Europa", [
+        ["Mediteran", 40.0, "Testudo hermanni"],
+    ]],
+    ["Općenito", [
+        ["Ekvator — općenito", 0.0, "12 h dana cijele godine"],
+    ]],
+];
+
+const ZADANO_SUNCE = { max_jacina: 90, kelvin_min: 2700, kelvin_max: 5600 };
+// ručni dan: 8 dijelova; svaki drži svoju jačinu i boju od svog početka do sljedećeg,
+// a na početku se kroz "prijelaz" minuta postupno pretopi iz prethodnog
+const ZADANO_RUCNO = { prijelaz_min: 20, sekcije: [
+    { ime: "Zora",     od: "06:00", jacina: 5,   kelvin: 2700 },
+    { ime: "Jutro",    od: "07:00", jacina: 30,  kelvin: 3000 },
+    { ime: "Rani dan", od: "09:00", jacina: 60,  kelvin: 4000 },
+    { ime: "Dan",      od: "11:00", jacina: 85,  kelvin: 5000 },
+    { ime: "Podne",    od: "13:00", jacina: 100, kelvin: 5600 },
+    { ime: "Popodne",  od: "15:00", jacina: 80,  kelvin: 5000 },
+    { ime: "Večer",    od: "18:00", jacina: 35,  kelvin: 3200 },
+    { ime: "Noć",      od: "20:00", jacina: 0,   kelvin: 2700 },
+] };
+const kopijaRucno = r => ({ prijelaz_min: r.prijelaz_min, sekcije: r.sekcije.map(x => ({ ...x })) });
+const DANI_HR = { Mon: "Pon", Tue: "Uto", Wed: "Sri", Thu: "Čet", Fri: "Pet", Sat: "Sub", Sun: "Ned" };
+
+// ================= VRIJEME I ZONE =================
+const fmtCache = new Map();
+function fmt(tz) {
+    if (!fmtCache.has(tz)) fmtCache.set(tz, new Intl.DateTimeFormat("en-GB", {
+        timeZone: tz, hourCycle: "h23", year: "numeric", month: "numeric", day: "numeric",
+        hour: "numeric", minute: "numeric", second: "numeric", weekday: "short" }));
+    return fmtCache.get(tz);
+}
+// tz je ili ime zone (Intl, za pravi svijet u vremeplovu) ili broj minuta od UTC-a (uređaj)
+function dijelovi(ms, tz) {
+    if (typeof tz === "number") {
+        const t = new Date(ms + tz * 60000);
+        return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate(), h: t.getUTCHours(), min: t.getUTCMinutes(),
+                 s: t.getUTCSeconds(), wd: ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"][t.getUTCDay()] };
+    }
+    const o = {};
+    for (const p of fmt(tz).formatToParts(new Date(ms))) o[p.type] = p.value;
+    return { y: +o.year, m: +o.month, d: +o.day, h: +o.hour, min: +o.minute, s: +o.second, wd: DANI_HR[o.weekday] || o.weekday };
+}
+// koliko je minuta lokalno vrijeme ispred UTC-a (Zagreb ljeti: +120)
+function offsetMin(ms, tz) {
+    if (typeof tz === "number") return tz;
+    const p = dijelovi(ms, tz);
+    return Math.round((Date.UTC(p.y, p.m - 1, p.d, p.h, p.min, p.s) - Math.floor(ms / 1000) * 1000) / 60000);
+}
+function lokalnoUUtc(y, m, d, minDana, tz) {
+    const g = Date.UTC(y, m - 1, d, 0, minDana);
+    let t = g - offsetMin(g, tz) * 60000;
+    return g - offsetMin(t, tz) * 60000;
+}
+// uređaj ne zna pravila za ljetno vrijeme: korisnik ga sam uključi u izborniku
+const zonaDoma = (dom, ljetno) => Math.round(dom.utc_pomak * 60) + (ljetno ? 60 : 0);
+const zona = post => zonaDoma(post.dom, post.ljetno);
+const PRAVA_ZONA = Intl.DateTimeFormat().resolvedOptions().timeZone;
+function fmtOffset(min) {
+    const z = min < 0 ? "−" : "+", a = Math.abs(min);
+    return "UTC" + z + Math.floor(a / 60) + (a % 60 ? ":" + pad(a % 60) : "");
+}
+const danUGodini = (y, m, d) => (Date.UTC(y, m - 1, d) - Date.UTC(y, 0, 1)) / DAN_MS + 1;
+function dodajDane(dt, n) {
+    const t = new Date(Date.UTC(dt.y, dt.m - 1, dt.d) + n * DAN_MS);
+    return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() };
+}
+// isto kao pomak.py: datum − pomak dana, 29.02. → 28.02. poslije pomaka
+function datumStanista(y, m, d, pomak) {
+    const r = dodajDane({ y, m, d }, -pomak);
+    if (r.m === 2 && r.d === 29) r.d = 28;
+    return r;
+}
+const hhmm = min => { min = ((Math.round(min) % 1440) + 1440) % 1440; return pad(Math.floor(min / 60)) + ":" + pad(min % 60); };
+const uMin = s => { const [h, m] = s.split(":").map(Number); return h * 60 + m; };
+const danaUGodini = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
+
+// ================= SUNCE (NOAA, pojednostavljeno) =================
+function deklinacija(doy) {
+    const g = 2 * Math.PI / 365 * (doy - 0.5);
+    return 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g)
+         + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+}
+function jednadzbaVremena(doy) {
+    const g = 2 * Math.PI / 365 * (doy - 0.5);
+    return 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g)
+         - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+}
+// §2.6: lat staništa, lon doma
+function elevacija(lat, dek, utcMin, eq, lon) {
+    const ha = rad((utcMin + eq + 4 * lon) / 4 - 180);
+    const z = Math.sin(rad(lat)) * Math.sin(dek) + Math.cos(rad(lat)) * Math.cos(dek) * Math.cos(ha);
+    return deg(Math.asin(clamp(z, -1, 1)));
+}
+
+// PRIVREMENO (§3 otvoreno): jačina i boja iz elevacije
+function svjetloIz(post, e, eMax, minZid) {
+    if (post.nacin === "sunce") {
+        const s = post.sunce;
+        // pali se tek kad sunce izađe (−0.833° = izlazak); ispod toga mrak, bez svitanja
+        // počinje od 5 %, jer LED na jako niskim postocima treperi ili skače
+        const IZLAZAK = -0.833, MIN_JACINA = 0.05;
+        if (e < IZLAZAK || eMax <= 0) return { j: 0, k: s.kelvin_min };
+        let j = MIN_JACINA + (1 - MIN_JACINA) * Math.sin(rad(Math.max(0, e))) / Math.sin(rad(Math.max(eMax, 1)));
+        j = clamp(j, 0, 1) * s.max_jacina;
+        // boja se kreće između korisnikovih granica: najžuće nisko, najbjelje kad je sunce visoko
+        const k = s.kelvin_min + (s.kelvin_max - s.kelvin_min) * clamp(e / Math.min(Math.max(eMax, 5), 35), 0, 1);
+        return { j, k };
+    }
+    const { sad, prije, t } = trenutnaSekcija(post.rucno, minZid), r = post.rucno;
+    const f = r.prijelaz_min ? clamp(t / r.prijelaz_min, 0, 1) : 1;
+    return { j: prije.jacina + (sad.jacina - prije.jacina) * f, k: prije.kelvin + (sad.kelvin - prije.kelvin) * f };
+}
+// koji je dio dana sad (prije prvog početka vrijedi zadnji od jučer)
+function trenutnaSekcija(r, minZid) {
+    const S = r.sekcije, n = S.length;
+    let i = n - 1;
+    S.forEach((x, k) => { if (uMin(x.od) <= minZid) i = k; });
+    return { sad: S[i], prije: S[(i - 1 + n) % n], iduca: S[(i + 1) % n], t: (minZid - uMin(S[i].od) + 1440) % 1440 };
+}
+// omjer WW:CW = boja, zbroj = jačina (HARDVER.md)
+function kanali(j, k) {
+    const x = clamp((1 / 2700 - 1 / k) / (1 / 2700 - 1 / 6500), 0, 1);
+    return { ww: j * (1 - x), cw: j * x };
+}
+function kelvinRgb(K) {
+    const t = K / 100;
+    const r = t <= 66 ? 255 : 329.698727446 * Math.pow(t - 60, -0.1332047592);
+    const g = t <= 66 ? 99.4708025861 * Math.log(t) - 161.1195681661 : 288.1221695283 * Math.pow(t - 60, -0.0755148492);
+    const b = t >= 66 ? 255 : t <= 19 ? 0 : 138.5177312231 * Math.log(t - 10) - 305.0447927307;
+    return [r, g, b].map(v => Math.round(clamp(v, 0, 255)));
+}
+
+// cijeli dan za graf i ekran (sat na zidu doma, korak 2 min)
+const danCache = new Map();
+function dan(post, y, m, d) {
+    const kljuc = JSON.stringify([post, y, m, d]);
+    if (danCache.has(kljuc)) return danCache.get(kljuc);
+    const tz = zona(post);
+    const o0 = offsetMin(lokalnoUUtc(y, m, d, 0, tz), tz), o1 = offsetMin(lokalnoUUtc(y, m, d, 1439, tz), tz);
+    const ds = datumStanista(y, m, d, post.pomak_dana);
+    const dek = deklinacija(danUGodini(ds.y, ds.m, ds.d));   // oblik dana: datum staništa
+    const eq = jednadzbaVremena(danUGodini(y, m, d));        // kad je podne: pravi datum
+    const tocke = [];
+    for (let min = 0; min < 1440; min += 2) {
+        const zid = Date.UTC(y, m - 1, d, 0, min);
+        const off = o0 === o1 ? o0 : offsetMin(zid - o0 * 60000, tz);
+        const utcMin = (((zid - off * 60000) / 60000) % 1440 + 1440) % 1440;
+        tocke.push({ min, e: elevacija(post.staniste.lat, dek, utcMin, eq, post.dom.lon) });
+    }
+    let eMax = -90, podne = 720, izlazak = null, zalazak = null;
+    tocke.forEach((t, i) => {
+        if (t.e > eMax) { eMax = t.e; podne = t.min; }
+        if (i) {
+            const a = tocke[i - 1];
+            // −0.833° = gornji rub sunca uz lom svjetla, kao u službenim tablicama
+            const H0 = -0.833;
+            if (a.e < H0 && t.e >= H0) izlazak = a.min + 2 * (H0 - a.e) / (t.e - a.e);
+            if (a.e >= H0 && t.e < H0) zalazak = a.min + 2 * (a.e - H0) / (a.e - t.e);
+        }
+    });
+    for (const t of tocke) Object.assign(t, svjetloIz(post, t.e, eMax, t.min));
+    const r = { tocke, eMax, podne, izlazak, zalazak, ds, dek, eq, offsetZid: o0 };
+    if (danCache.size > 60) danCache.clear();
+    danCache.set(kljuc, r);
+    return r;
+}
+
+// ================= SIMULACIJA I UREĐAJ =================
+const SIM = { ms: Date.now(), brzina: 1, pauza: false };
+const U = { post: null, satOk: false, pomakSata: 0, ekran: null, stog: [], gasen: false, stranica: 0, nacrt: {} };
+const uredajMs = () => SIM.ms + U.pomakSata;
+const tzUredaja = () => U.post ? zona(U.post) : U.nacrt.dom ? zonaDoma(U.nacrt.dom, U.nacrt.ljetno) : PRAVA_ZONA;
+
+function svjetloSad() {
+    if (!U.post || !U.satOk || U.gasen) return null;
+    const ms = uredajMs(), tz = zona(U.post), p = dijelovi(ms, tz), d = dan(U.post, p.y, p.m, p.d);
+    const utcMin = ((ms / 60000) % 1440 + 1440) % 1440;
+    const e = elevacija(U.post.staniste.lat, d.dek, utcMin, d.eq, U.post.dom.lon);
+    const s = svjetloIz(U.post, e, d.eMax, p.h * 60 + p.min + p.s / 60);
+    return { ...s, ...kanali(s.j, s.k), e, p, d };
+}
+
+// ---------- crtanje ekrana ----------
+const cv = $("#ekran"), c = cv.getContext("2d");
+const W = 400, H = 200, FG = "#d8f3ff", DIM = "#6f97a6", BG = "#020607";
+(function () { const r = window.devicePixelRatio || 1; cv.width = W * r; cv.height = H * r; c.setTransform(r, 0, 0, r, 0, 0); })();
+const F = (px, b) => `${b ? "700 " : ""}${px}px "SF Mono", Menlo, Consolas, monospace`;
+function tekst(s, x, y, o = {}) {
+    c.font = F(o.px || 16, o.b); c.fillStyle = o.boja || FG; c.textAlign = o.align || "left"; c.textBaseline = "alphabetic";
+    c.fillText(s, x, y);
+}
+function skrati(s, maxW, px, b) {
+    c.font = F(px, b);
+    if (c.measureText(s).width <= maxW) return s;
+    while (s.length > 1 && c.measureText(s + "…").width > maxW) s = s.slice(0, -1);
+    return s + "…";
+}
+function zaglavlje(lijevo, desno) {
+    tekst(skrati(lijevo, 250, 13, true), 12, 20, { px: 13, b: true });
+    if (desno) tekst(desno, W - 12, 20, { px: 13, align: "right", boja: DIM });
+    c.fillStyle = DIM; c.fillRect(12, 27, W - 24, 1);
+}
+const podnozje = s => tekst(s, W / 2, H - 9, { px: 12, boja: DIM, align: "center" });
+
+// ---------- vrste ekrana ----------
+function ekranLista({ naslov, korak, stavke: st, index = 0, opis, onOk, hint, natrag, pregled }) {
+    let i = index;
+    const L = () => typeof st === "function" ? st() : st;
+    const VID = 4;
+    return {
+        crtaj() {
+            zaglavlje(naslov, korak);
+            const stavke = L(), n = stavke.length, od = clamp(i - 1, 0, Math.max(0, n - VID));
+            for (let r = 0; r < Math.min(VID, n); r++) {
+                const k = od + r, y = 52 + r * 24, sel = k === i;
+                if (sel) { c.fillStyle = FG; c.fillRect(10, y - 17, W - 34, 23); }
+                tekst((sel ? "▶ " : "  ") + skrati(stavke[k], W - 70, 16, sel), 16, y, { px: 16, b: sel, boja: sel ? BG : FG });
+            }
+            if (n > VID) {
+                c.fillStyle = "#1c2a30"; c.fillRect(W - 16, 35, 4, VID * 24 - 2);
+                c.fillStyle = DIM; c.fillRect(W - 16, 35 + (VID * 24 - 2) * od / n, 4, Math.max(8, (VID * 24 - 2) * VID / n));
+            }
+            if (opis) tekst(skrati(opis(i), W - 24, 13), 12, H - 32, { px: 13, boja: DIM });
+            podnozje(hint || "▲▼ biraj · OK potvrdi · ← natrag");
+        },
+        gore() { i = (i - 1 + L().length) % L().length; },
+        dolje() { i = (i + 1) % L().length; },
+        ok() { onOk(i); },
+        natrag,
+        pregled: pregled && (() => pregled(i)),
+    };
+}
+// predlozak: retci od komada; broj = indeks polja
+function ekranBrojevi({ naslov, korak, polja, predlozak, napomena, onOk, pregled }) {
+    let f = 0;
+    const v = polja.map(p => p.v);
+    const prikaz = k => (polja[k].fmt || pad)(v[k], v);
+    function promijeni(k, smjer) {
+        const p = polja[k], step = p.step || 1, max = typeof p.max === "function" ? p.max(v) : p.max,
+              min = typeof p.min === "function" ? p.min(v) : p.min;
+        let n = v[k] + smjer * step;
+        if (n > max) n = p.wrap === false ? max : min;
+        if (n < min) n = p.wrap === false ? min : max;
+        v[k] = n;
+    }
+    return {
+        crtaj() {
+            zaglavlje(naslov, korak);
+            const yy = predlozak.length > 2 ? 30 : 38, y0 = predlozak.length > 2 ? 52 : 66;
+            predlozak.forEach((red, ri) => {
+                const px = predlozak.length > 2 ? 18 : 24, y = y0 + ri * yy;
+                c.font = F(px, true);
+                const komadi = red.map(k => typeof k === "number" ? prikaz(k) : k);
+                const ukupno = komadi.reduce((s, t) => s + c.measureText(t).width, 0);
+                let x = predlozak.length > 2 ? 24 : (W - ukupno) / 2;
+                red.forEach((k, ki) => {
+                    const t = komadi[ki], w = c.measureText(t).width;
+                    if (typeof k === "number" && k === f) {
+                        c.fillStyle = FG; c.fillRect(x - 3, y - px + 2, w + 6, px + 4);
+                        tekst(t, x, y, { px, b: true, boja: BG });
+                    } else tekst(t, x, y, { px, b: typeof k === "number", boja: typeof k === "number" ? FG : DIM });
+                    x += w;
+                });
+            });
+            if (napomena) napomena(v).forEach((s, k) => tekst(skrati(s, W - 24, 13), 12, H - 46 + k * 16, { px: 13, boja: DIM }));
+            podnozje(f < polja.length - 1 ? "▲▼ mijenjaj · OK dalje · ← natrag" : "▲▼ mijenjaj · OK potvrdi · ← natrag");
+        },
+        gore() { promijeni(f, 1); },
+        dolje() { promijeni(f, -1); },
+        ok() {
+            if (f < polja.length - 1) { f++; return; }
+            onOk(v.slice());
+        },
+        natrag() { if (f > 0) { f--; return true; } },   // prvo natrag kroz polja, onda na prošli ekran
+        pregled: pregled && (() => pregled(v, f)),       // dok biraš jačinu/boju, traka odmah to pokazuje
+    };
+}
+function ekranInfo({ naslov, korak, linije, onOk, hint, upozorenje, natrag }) {
+    return {
+        crtaj() {
+            zaglavlje(naslov, korak);
+            linije().forEach((l, k) => {
+                const o = typeof l === "string" ? { t: l } : l;
+                tekst(skrati(o.t, W - 24, o.px || 15, o.b), o.centar ? W / 2 : 12, 52 + k * 22,
+                    { px: o.px || 15, b: o.b, boja: o.dim ? DIM : (upozorenje && k === 0 ? "#ffd27a" : FG), align: o.centar ? "center" : "left" });
+            });
+            podnozje(hint || "OK dalje");
+        },
+        gore() {}, dolje() {},
+        ok() { onOk(); },
+        natrag,
+    };
+}
+// stog prijašnjih ekrana za tipku ←; korijen (početak, glavni, izbornik) ga briše
+function postavi(e, korijen) {
+    if (korijen) U.stog = [];
+    else if (U.ekran) U.stog.push(U.ekran);
+    U.ekran = e; osvjeziPanele();
+}
+function vratiSe() {
+    if (U.stog.length) { U.ekran = U.stog.pop(); osvjeziPanele(); }
+}
+
+// ---------- koraci (isti za prvo postavljanje i za izbornik) ----------
+// dva koraka: prvo kategorija, pa stavka u njoj; ← iz stavke vraća na kategorije
+function korakKategorija({ naslov, grupe, poc, opis, korak, gotovo }) {
+    const gi = Math.max(0, grupe.findIndex(g => g[1].some(x => x[0] === poc)));
+    postavi(ekranLista({ naslov, korak, stavke: grupe.map(g => g[0]), index: gi,
+        opis: k => `${grupe[k][1].length} na popisu`,
+        onOk: k => {
+            const stavke = grupe[k][1], si = Math.max(0, stavke.findIndex(x => x[0] === poc));
+            postavi(ekranLista({ naslov: grupe[k][0].toUpperCase(), korak, stavke: stavke.map(x => x[0]), index: si,
+                opis: i => opis(stavke[i]), onOk: i => gotovo(stavke[i]) }));
+        } }));
+}
+function korakDrzava(poc, gotovo, korak) {
+    korakKategorija({ naslov: "GDJE ŽIVIŠ?", grupe: DOM, poc, korak,
+        opis: d => `podne po suncu ≈ ${d[1] >= 0 ? d[1] + "° E" : -d[1] + "° W"}`,
+        gotovo: d => gotovo({ mjesto: d[0], lat: d[3], lon: d[1], utc_pomak: d[2] }) });
+}
+function korakDatum(poc, gotovo, korak) {
+    postavi(ekranBrojevi({ naslov: "DATUM", korak,
+        polja: [{ v: poc.d, min: 1, max: v => danaUGodini(v[2], v[1]) }, { v: poc.m, min: 1, max: 12 },
+                { v: poc.y, min: 2024, max: 2099, wrap: false, fmt: x => String(x) }],
+        predlozak: [[0, ".", 1, ".", 2, "."]],
+        napomena: () => ["Dan, mjesec, godina."],
+        onOk: v => gotovo({ d: Math.min(v[0], danaUGodini(v[2], v[1])), m: v[1], y: v[2] }) }));
+}
+function korakLjetno(poc, gotovo, korak) {
+    postavi(ekranLista({ naslov: "LJETNO VRIJEME", korak, stavke: ["Ne — zimsko vrijeme", "Da — sat je pomaknut +1 h"],
+        index: poc ? 1 : 0,
+        opis: () => "Isto kao na satu na zidu. Mijenjaš u izborniku.",
+        onOk: k => gotovo(k === 1) }));
+}
+function korakSat(poc, gotovo, korak) {
+    postavi(ekranBrojevi({ naslov: "KOLIKO JE SATI?", korak,
+        polja: [{ v: poc.h, min: 0, max: 23 }, { v: poc.min, min: 0, max: 59 }],
+        predlozak: [[0, ":", 1]],
+        napomena: () => ["Upiši što piše na satu na zidu."],
+        onOk: v => gotovo({ h: v[0], min: v[1] }) }));
+}
+function korakStaniste(poc, gotovo, korak) {
+    korakKategorija({ naslov: "STANIŠTE", grupe: STANISTA, poc, korak,
+        opis: x => `${Math.abs(x[1])}° ${x[1] < 0 ? "J" : "S"} · ${x[2]}`,
+        gotovo: x => gotovo({ regija: x[0], lat: x[1] }) });
+}
+const mjULabel = v => v === 0 ? "0 mj" : (v > 0 ? "+" : "−") + Math.abs(v) + " mj";
+const mjUDane = v => Math.round(v * 30.44);
+// duljina dana u satima (izlazak→zalazak, −0.833°)
+function duljinaDana(lat, dek) {
+    const x = (Math.sin(rad(-0.833)) - Math.sin(rad(lat)) * Math.sin(dek)) / (Math.cos(rad(lat)) * Math.cos(dek));
+    return x >= 1 ? 0 : x <= -1 ? 24 : 2 * deg(Math.acos(x)) / 15;
+}
+const fmtH = h => { let hh = Math.floor(h), mm = Math.round((h - hh) * 60); if (mm === 60) { hh++; mm = 0; } return `${hh} h ${pad(mm)}`; };
+// cijela godina: [{doy, doma, tamo}] za graf sezone
+function godina(y, latDom, latSt, pomak) {
+    const r = [];
+    for (let doy = 1; doy <= 365; doy += 3) {
+        const dt = dodajDane({ y, m: 1, d: 1 }, doy - 1), ds = datumStanista(dt.y, dt.m, dt.d, pomak);
+        r.push({ doy, doma: latDom == null ? null : duljinaDana(latDom, deklinacija(doy)),
+                 tamo: duljinaDana(latSt, deklinacija(danUGodini(ds.y, ds.m, ds.d))) });
+    }
+    return r;
+}
+function korakSezona(poc, gotovo, korak, latSt, latDom) {
+    let mj = Math.round(poc / 30.44);
+    postavi({
+        crtaj() {
+            zaglavlje("SEZONA · DULJINA DANA", korak);
+            const p = dijelovi(uredajMs(), tzUredaja()), pomak = mjUDane(mj), ds = datumStanista(p.y, p.m, p.d, pomak);
+            c.font = F(18, true);
+            const lab = mjULabel(mj), w = c.measureText(lab).width;
+            tekst("pomak", 12, 52, { px: 15, boja: DIM });
+            c.fillStyle = FG; c.fillRect(70, 36, w + 8, 22);
+            tekst(lab, 74, 53, { px: 18, b: true, boja: BG });
+            tekst(`tamo je ${ds.d}.${ds.m}.`, W - 12, 52, { px: 13, boja: DIM, align: "right" });
+            // graf
+            const god = godina(p.y, latDom, latSt, pomak), sve = god.flatMap(t => [t.doma, t.tamo]).filter(v => v != null);
+            const lo = Math.floor(Math.min(...sve) - 0.5), hi = Math.ceil(Math.max(...sve) + 0.5);
+            const x0 = 40, x1 = W - 12, yT = 66, yB = 148;
+            const X = d => x0 + (x1 - x0) * (d - 1) / 364, Y = h => yB - (yB - yT) * (h - lo) / Math.max(1, hi - lo);
+            c.fillStyle = "#1c2a30"; c.fillRect(x0, yB, x1 - x0, 1); c.fillRect(x0, yT, 1, yB - yT);
+            tekst(hi + "h", x0 - 4, yT + 8, { px: 11, boja: DIM, align: "right" });
+            tekst(lo + "h", x0 - 4, yB, { px: 11, boja: DIM, align: "right" });
+            [["I", 1], ["IV", 91], ["VII", 182], ["X", 274]].forEach(([t, d]) => tekst(t, X(d), yB + 13, { px: 11, boja: DIM, align: "center" }));
+            const linija = (kljuc, crtice) => {
+                c.beginPath(); god.forEach((t, k) => k ? c.lineTo(X(t.doy), Y(t[kljuc])) : c.moveTo(X(t.doy), Y(t[kljuc])));
+                c.setLineDash(crtice); c.strokeStyle = FG; c.lineWidth = crtice.length ? 1.5 : 2; c.stroke(); c.setLineDash([]);
+            };
+            if (latDom != null) linija("doma", []);
+            linija("tamo", [4, 3]);
+            const danas = danUGodini(p.y, p.m, p.d);
+            c.fillStyle = DIM; c.fillRect(X(danas), yT, 1, yB - yT);
+            const dd = god.reduce((a, t) => Math.abs(t.doy - danas) < Math.abs(a.doy - danas) ? t : a);
+            tekst((latDom != null ? `— doma ${fmtH(dd.doma)}   ` : "") + `- - tamo ${fmtH(dd.tamo)}`, 12, 178, { px: 12 });
+            podnozje("▲▼ pomak · OK potvrdi · ← natrag");
+        },
+        gore() { mj = Math.min(6, mj + 1); },
+        dolje() { mj = Math.max(-6, mj - 1); },
+        ok() { gotovo(mjUDane(mj)); },
+    });
+}
+function korakNacin(poc, gotovo, korak) {
+    postavi(ekranLista({ naslov: "NAČIN RADA", korak, stavke: ["☀ Sunce staništa", "⏱ Ručni raspored"],
+        index: poc === "rucno" ? 1 : 0,
+        opis: k => k === 0 ? "izlazak, zalazak, jačina i boja same" : "ti zadaš kad pali i gasi",
+        onOk: k => gotovo(k === 0 ? "sunce" : "rucno") }));
+}
+function korakSunce(poc, gotovo, korak) {
+    postavi(ekranBrojevi({ naslov: "SUNCE · GRANICE", korak,
+        polja: [{ v: poc.max_jacina, min: 5, max: 100, step: 5, wrap: false, fmt: x => String(x).padStart(3, " ") },
+                { v: poc.kelvin_min, min: 2700, max: v => v[2], step: 100, wrap: false, fmt: x => String(x) },
+                { v: poc.kelvin_max, min: v => v[1], max: 6500, step: 100, wrap: false, fmt: x => String(x) }],
+        predlozak: [["Najjače    ", 0, " %"], ["Najžuće    ", 1, " K"], ["Najbjelje  ", 2, " K"]],
+        napomena: () => ["Traka odmah pokazuje odabrano."],
+        pregled: (v, f) => ({ j: v[0], k: f === 1 ? v[1] : v[2] }),
+        onOk: v => gotovo({ max_jacina: v[0], kelvin_min: v[1], kelvin_max: v[2] }) }));
+}
+function korakRucno(poc, gotovo, korak) {
+    const r = kopijaRucno(poc), S = r.sekcije;
+    const redak = x => `${x.od}  ${x.ime.padEnd(9, " ")}${String(x.jacina).padStart(3, " ")} %`;
+    postavi(ekranLista({ naslov: "RUČNI DAN", korak,
+        stavke: () => [...S.map(redak), `Prijelaz ${r.prijelaz_min} min`, "✓ Gotovo"],
+        opis: k => k < S.length ? `${S[k].kelvin} K · OK = uredi` : k === S.length ? "koliko se dugo pretapa u idući dio" : "spremi raspored",
+        pregled: k => k < S.length ? { j: S[k].jacina, k: S[k].kelvin } : null,
+        hint: "▲▼ biraj · OK uredi · ← natrag",
+        onOk: k => {
+            if (k === S.length + 1) return gotovo(r);
+            if (k === S.length) return postavi(ekranBrojevi({ naslov: "PRIJELAZ", korak,
+                polja: [{ v: r.prijelaz_min, min: 0, max: 60, step: 5, wrap: false, fmt: x => String(x).padStart(2, " ") }],
+                predlozak: [["", 0, " min"]],
+                napomena: () => ["0 = naglo. Inače se svjetlo postupno", "pretopi iz prošlog dijela u idući."],
+                onOk: v => { r.prijelaz_min = v[0]; vratiSe(); } }));
+            const x = S[k], min = k ? uMin(S[k - 1].od) + 15 : 0, max = k < S.length - 1 ? uMin(S[k + 1].od) - 15 : 1425;
+            postavi(ekranBrojevi({ naslov: x.ime.toUpperCase(), korak,
+                polja: [{ v: uMin(x.od), min, max, step: 15, wrap: false, fmt: hhmm },
+                        { v: x.jacina, min: 0, max: 100, step: 5, wrap: false, fmt: v => String(v).padStart(3, " ") },
+                        { v: x.kelvin, min: 2700, max: 6500, step: 100, wrap: false, fmt: v => String(v) }],
+                predlozak: [["Od      ", 0], ["Jačina  ", 1, " %"], ["Boja    ", 2, " K"]],
+                napomena: () => ["Traka odmah pokazuje odabrano."],
+                pregled: v => ({ j: v[1], k: v[2] }),
+                onOk: v => { Object.assign(x, { od: hhmm(v[0]), jacina: v[1], kelvin: v[2] }); vratiSe(); } }));
+        } }));
+}
+function namjestiSat(datum, sat, tz) {
+    const ms = lokalnoUUtc(datum.y, datum.m, datum.d, sat.h * 60 + sat.min, tz);
+    U.pomakSata = ms - SIM.ms;
+    U.satOk = true;
+}
+
+// ---------- tokovi ----------
+function pocetak() {
+    U.nacrt = {};
+    postavi(ekranInfo({ naslov: "DOBRODOŠLI",
+        linije: () => ["Postavljanje traje", "oko 2 minute.", { t: "Trebaš: državu, točan sat", dim: true }, { t: "i stanište životinje.", dim: true }],
+        hint: "OK kreni", onOk: rucnoPostavljanje, natrag: () => true }), true);
+}
+// svaki korak kreće od onoga što je već upisano, pa ← i ponovni OK ne brišu odabir
+function rucnoPostavljanje() {
+    const n = U.nacrt, K = k => k + "/8";
+    korakDrzava(n.dom?.mjesto || "Hrvatska", dom => {
+        n.dom = dom;
+        korakDatum(n.datum || { d: 1, m: 10, y: 2026 }, datum => {          // polazni datum = datum firmvera
+            n.datum = datum;
+          korakLjetno(n.ljetno, ljetno => {
+            n.ljetno = ljetno;
+            korakSat(n.sat || { h: 12, min: 0 }, sat => {
+                n.sat = sat;
+                namjestiSat(datum, sat, zonaDoma(dom, ljetno));
+                korakStaniste(n.staniste?.regija, st => {
+                    n.staniste = st;
+                    korakSezona(n.pomak_dana || 0, pomak => {
+                        n.pomak_dana = pomak;
+                        korakNacin(n.nacin || "sunce", nacin => {
+                            n.nacin = nacin;
+                            n.sunce = n.sunce || { ...ZADANO_SUNCE }; n.rucno = n.rucno || kopijaRucno(ZADANO_RUCNO);
+                            const dalje = x => { n[nacin] = x; pregled(); };
+                            nacin === "sunce" ? korakSunce(n.sunce, dalje, K(8)) : korakRucno(n.rucno, dalje, K(8));
+                        }, K(7));
+                    }, K(6), st.lat, dom.lat);
+                }, K(5));
+            }, K(4));
+          }, K(3));
+        }, K(2));
+    }, K(1));
+}
+function pregled() {
+    const n = U.nacrt;
+    postavi(ekranInfo({ naslov: "GOTOVO ✓", korak: "provjeri",
+        linije: () => [
+            "Dom:  " + n.dom.mjesto,
+            "Tamo: " + n.staniste.regija,
+            "Sezona: " + mjULabel(Math.round(n.pomak_dana / 30.44)),
+            n.nacin === "sunce" ? `☀ do ${n.sunce.max_jacina} % · ${n.sunce.kelvin_min}–${n.sunce.kelvin_max} K`
+                                : `⏱ ${n.rucno.sekcije.length} dijelova · prijelaz ${n.rucno.prijelaz_min} min`,
+        ],
+        hint: "OK spremi i pokreni",
+        onOk: () => spremi({ dom: n.dom, ljetno: n.ljetno, staniste: n.staniste, pomak_dana: n.pomak_dana, nacin: n.nacin,
+                             sunce: n.sunce, rucno: n.rucno }) }));
+}
+function spremi(post) { U.post = post; U.nacrt = {}; U.stranica = 0; glavni(); }
+
+function satNevazeci() {
+    postavi(ekranInfo({ naslov: "⚠ SAT NIJE TOČAN", upozorenje: true,
+        linije: () => ["Sat je izgubio vrijeme", "(prazna baterija).", "Svjetlo je UGAŠENO dok", "ne upišeš datum i sat."],
+        hint: "OK upiši datum i sat",
+        natrag: () => true,
+        onOk: () => korakDatum({ d: 1, m: 10, y: 2026 }, datum =>
+            korakSat({ h: 12, min: 0 }, sat => { namjestiSat(datum, sat, zona(U.post)); glavni(); }, "2/2"), "1/2") }), true);
+}
+
+// ---------- glavni ekran ----------
+function glavni() {
+    if (!U.post) return pocetak();
+    if (!U.satOk) return satNevazeci();
+    postavi({
+        crtaj: crtajGlavni,
+        gore() { U.stranica = (U.stranica + 2) % 3; },
+        dolje() { U.stranica = (U.stranica + 1) % 3; },
+        ok() { izbornik(); },
+        natrag() { U.stranica = 0; return true; },
+    }, true);
+}
+function crtajGlavni() {
+    const s = svjetloSad(); if (!s) return;
+    const { p, d } = s, post = U.post, tz = zona(post), ms = uredajMs();
+    const ljeto = post.ljetno;
+    zaglavlje(`${pad(p.h)}:${pad(p.min)}  ${p.wd} ${p.d}.${p.m}.`, `${fmtOffset(offsetMin(ms, tz))} ${ljeto ? "ljetno" : "zimsko"}`);
+    for (let k = 0; k < 3; k++) { c.fillStyle = k === U.stranica ? FG : "#1f3138"; c.fillRect(W - 7, 70 + k * 12, 3, 8); }
+
+    if (U.stranica === 0) {
+        tekst(skrati(post.nacin === "sunce" ? "☀ SUNCE · " + post.staniste.regija : `⏱ RUČNO · ${trenutnaSekcija(post.rucno, p.h * 60 + p.min).sad.ime}`, W - 40, 13), 12, 48, { px: 13, boja: DIM });
+        tekst(`${Math.round(s.j)} %`, 12, 86, { px: 30, b: true });
+        tekst(s.j > 0.5 ? `${Math.round(s.k / 100) * 100} K` : "noć", W - 20, 86, { px: 22, b: true, align: "right", boja: s.j > 0.5 ? FG : DIM });
+        // mini krivulja
+        const x0 = 12, x1 = W - 20, yb = 160, hh = 56, max = Math.max(1, post.nacin === "sunce" ? post.sunce.max_jacina : Math.max(...post.rucno.sekcije.map(x => x.jacina)));
+        const X = min => x0 + (x1 - x0) * min / 1440, Y = j => yb - hh * j / max;
+        const sadMin = p.h * 60 + p.min;
+        c.beginPath(); c.moveTo(X(0), yb);
+        d.tocke.forEach(t => { if (t.min <= sadMin) c.lineTo(X(t.min), Y(t.j)); });
+        c.lineTo(X(sadMin), yb); c.closePath(); c.fillStyle = "rgba(216,243,255,.25)"; c.fill();
+        c.beginPath(); d.tocke.forEach((t, k) => k ? c.lineTo(X(t.min), Y(t.j)) : c.moveTo(X(t.min), Y(t.j)));
+        c.strokeStyle = FG; c.lineWidth = 1.5; c.stroke();
+        c.fillStyle = "#1f3138"; c.fillRect(x0, yb, x1 - x0, 1);
+        c.fillStyle = FG; c.fillRect(X(sadMin) - 0.5, yb - hh - 4, 1.5, hh + 6);
+        c.beginPath(); c.arc(X(sadMin), Y(s.j), 3.5, 0, 7); c.fill();
+        if (post.nacin === "sunce") {
+            tekst(d.izlazak != null ? "↑ " + hhmm(d.izlazak) : "↑ –", 12, 182, { px: 13, boja: DIM });
+            tekst("podne " + hhmm(d.podne), W / 2, 182, { px: 13, boja: DIM, align: "center" });
+            tekst(d.zalazak != null ? "↓ " + hhmm(d.zalazak) : "↓ –", W - 20, 182, { px: 13, boja: DIM, align: "right" });
+        } else {
+            const ts = trenutnaSekcija(post.rucno, p.h * 60 + p.min);
+            tekst("sad: " + ts.sad.ime, 12, 182, { px: 13, boja: DIM });
+            tekst(`→ ${ts.iduca.ime} ${ts.iduca.od}`, W - 20, 182, { px: 13, boja: DIM, align: "right" });
+        }
+        podnozje("");
+        tekst("▲▼ stranice · OK izbornik", W / 2, H - 1, { px: 10, boja: "#3e5a64", align: "center" });
+    } else if (U.stranica === 1) {
+        const st = post.staniste, ds = d.ds;
+        const l = [skrati(st.regija, W - 40, 15, true),
+            `${Math.abs(st.lat)}° ${st.lat < 0 ? "J" : "S"} · tamo je ${ds.d}.${ds.m}.`];
+        if (d.izlazak != null && d.zalazak != null) {
+            const t = d.zalazak - d.izlazak;
+            l.push(`Dan traje ${Math.floor(t / 60)} h ${pad(Math.round(t % 60))} min`,
+                   `↑ ${hhmm(d.izlazak)}   ↓ ${hhmm(d.zalazak)}`, `podne ${hhmm(d.podne)} (po tvom satu)`);
+        } else l.push(d.eMax > 0 ? "Polarni dan (§3 otvoreno)" : "Polarna noć (§3 otvoreno)");
+        l.forEach((t, k) => tekst(t, 12, 52 + k * 24, { px: 15, b: k === 0, boja: k > 2 ? DIM : FG }));
+        podnozje("▲▼ stranice   OK izbornik");
+    } else {
+        tekst("IZLAZ NA TRAKU (PWM)", 12, 50, { px: 13, b: true, boja: DIM });
+        [["toplo  WW", s.ww], ["hladno CW", s.cw]].forEach(([ime, v], k) => {
+            const y = 82 + k * 40;
+            tekst(ime, 12, y, { px: 15 });
+            c.fillStyle = "#1c2a30"; c.fillRect(120, y - 13, 200, 14);
+            c.fillStyle = FG; c.fillRect(120, y - 13, 200 * v / 100, 14);
+            tekst(Math.round(v) + " %", W - 14, y, { px: 15, b: true, align: "right" });
+        });
+        tekst("omjer = boja, zbroj = jačina", 12, 160, { px: 13, boja: DIM });
+        podnozje("▲▼ stranice   OK izbornik");
+    }
+}
+
+function izbornik(index = 0) {
+    const post = U.post;
+    const stavke = [
+        ["Način rada", () => post.nacin === "sunce" ? "Sunce staništa" : "Ručni raspored", () =>
+            korakNacin(post.nacin, n => { post.nacin = n; (n === "sunce" ? korakSunce : korakRucno)(post[n], x => { post[n] = x; izbornik(0); }); })],
+        ["Jačina i boja", () => post.nacin === "sunce" ? `do ${post.sunce.max_jacina} % · ${post.sunce.kelvin_min}–${post.sunce.kelvin_max} K` : `${post.rucno.sekcije.length} dijelova dana · prijelaz ${post.rucno.prijelaz_min} min`, () =>
+            post.nacin === "sunce" ? korakSunce(post.sunce, x => { post.sunce = x; izbornik(1); }) : korakRucno(post.rucno, x => { post.rucno = x; izbornik(1); })],
+        ["Stanište", () => post.staniste.regija, () => korakStaniste(post.staniste.regija, x => { post.staniste = x; izbornik(2); })],
+        ["Sezona", () => mjULabel(Math.round(post.pomak_dana / 30.44)), () => korakSezona(post.pomak_dana, x => { post.pomak_dana = x; izbornik(3); }, "", post.staniste.lat, post.dom.lat)],
+        ["Gdje živim", () => post.dom.mjesto, () => korakDrzava(post.dom.mjesto, x => { post.dom = x; izbornik(4); })],
+        ["Ljetno vrijeme", () => post.ljetno ? "DA — sat +1 h (OK = isključi)" : "NE — zimsko (OK = uključi)", () => {
+            post.ljetno = !post.ljetno; izbornik(5);
+        }],
+        ["Sat i datum", () => "ako sat kasni ili žuri", () => {
+            const p = dijelovi(uredajMs(), zona(post));
+            korakDatum(p, dt => korakSat(p, sat => { namjestiSat(dt, sat, zona(post)); izbornik(6); }, "2/2"), "1/2");
+        }],
+        ["Iz kutije", () => "obriši sve postavke", () => postavi(ekranLista({ naslov: "OBRISATI SVE?", stavke: ["Ne", "Da, obriši sve"],
+            onOk: k => k ? tvornicki() : izbornik(7) }))],
+        ["← Natrag", () => "na glavni ekran", () => glavni()],
+    ];
+    postavi(ekranLista({ naslov: "IZBORNIK", stavke: stavke.map(s => s[0]), index,
+        opis: k => stavke[k][1](), onOk: k => stavke[k][2](), natrag: () => { glavni(); return true; } }), true);
+}
+function tvornicki() {
+    U.post = null; U.satOk = false; U.pomakSata = 0; U.nacrt = {};
+    pocetak();
+}
+
+// ---------- tipke ----------
+const T = { gore: { dolje: false }, dolje: { dolje: false } };
+function akcija(a) {
+    if (U.gasen || !U.ekran) return;
+    if (a === "natrag") { if (U.ekran.natrag?.() !== true) vratiSe(); }
+    else U.ekran[a]?.();
+    osvjeziPanele();
+}
+function pritisak(ime) {
+    const t = T[ime];
+    t.dolje = true; t.ponavlja = false;
+    $("#t-" + ime).classList.add("pritisnuta");
+    t.timer = setTimeout(() => { t.ponavlja = true; ponavljaj(ime, 200); }, 450);
+}
+function ponavljaj(ime, int) {
+    akcija(ime);
+    T[ime].timer = setTimeout(() => ponavljaj(ime, Math.max(30, int * 0.86)), int);
+}
+function pustanje(ime) {
+    const t = T[ime];
+    if (!t.dolje) return;
+    t.dolje = false; clearTimeout(t.timer);
+    $("#t-" + ime).classList.remove("pritisnuta");
+    if (!t.ponavlja) akcija(ime);
+}
+for (const ime of ["gore", "dolje"]) {
+    const el = $("#t-" + ime);
+    el.addEventListener("pointerdown", e => { e.preventDefault(); el.setPointerCapture(e.pointerId); pritisak(ime); });
+    for (const ev of ["pointerup", "pointercancel"]) el.addEventListener(ev, () => pustanje(ime));
+    el.addEventListener("contextmenu", e => e.preventDefault());
+}
+{
+    const ok = $("#t-ok");
+    ok.addEventListener("pointerdown", e => { e.preventDefault(); ok.classList.add("pritisnuta"); });
+    ok.addEventListener("pointerup", () => { ok.classList.remove("pritisnuta"); akcija("ok"); });
+    ok.addEventListener("pointerleave", () => ok.classList.remove("pritisnuta"));
+    const nt = $("#t-natrag");
+    nt.addEventListener("pointerdown", e => { e.preventDefault(); nt.classList.add("pritisnuta"); });
+    nt.addEventListener("pointerup", () => { nt.classList.remove("pritisnuta"); akcija("natrag"); });
+    nt.addEventListener("pointerleave", () => nt.classList.remove("pritisnuta"));
+}
+document.addEventListener("keydown", e => {
+    if (e.target.closest("input, select, textarea")) return;
+    const map = { ArrowUp: "gore", ArrowDown: "dolje", Enter: "ok", Escape: "natrag", Backspace: "natrag" };
+    if (!map[e.key]) return;
+    e.preventDefault();
+    akcija(map[e.key]);
+});
+
+// ================= PANELI =================
+let vucem = false;   // dok prst/miš drži klizač, ne pomičemo ga ispod njega
+function osvjeziPanele() {
+    // svjetlo: pregled iz izbornika ima prednost pred izračunom
+    const stvarno = svjetloSad();
+    const pr = !U.gasen && U.ekran?.pregled?.();
+    const s = pr ? pr : stvarno;
+    osvijetliTerarij(s && s.j >= 0.3 ? s : null);
+
+    // doba dana: vrijeme uređaja (ili pravo vrijeme dok sat nije namješten)
+    const tz = tzUredaja(), p = dijelovi(U.satOk ? uredajMs() : SIM.ms, tz);
+    $("#doba-sat").textContent = `${pad(p.h)}:${pad(p.min)}`;
+    $("#doba-datum").textContent = `${p.wd} ${p.d}.${p.m}.${p.y}.` + (U.satOk ? "" : " · sat nije namješten");
+    if (!vucem) $("#klizac").value = p.h * 60 + p.min;
+}
+
+// terarij: traka svijetli bojom, prostor tamni kad je slabije i dobije ton boje
+function osvijetliTerarij(s) {
+    const a = s ? s.j / 100 : 0, boja = s ? `rgb(${kelvinRgb(s.k).join(",")})` : "#3a3f3d";
+    $("#led").setAttribute("fill", s ? boja : "#3a3f3d");
+    $("#led-sjaj").setAttribute("fill", boja);
+    $("#led-sjaj").setAttribute("opacity", s ? 0.5 + 0.5 * a : 0);
+    for (const [id, op] of [["#konus-1", 0.55 * a], ["#konus-2", 0.08 * a]]) {
+        $(id).setAttribute("stop-color", boja); $(id).setAttribute("stop-opacity", op);
+    }
+    $("#tint").setAttribute("fill", boja);
+    $("#tint").setAttribute("opacity", s ? 0.45 : 0);
+    $("#tama").setAttribute("opacity", (0.9 * Math.pow(1 - a, 1.6)).toFixed(3));
+}
+
+// ================= DOBA DANA (klizač) =================
+// pomiče svijet tako da sat uređaja pokaže odabrano vrijeme, isti dan
+function postaviDobaDana(min) {
+    const tz = tzUredaja(), sad = U.satOk ? uredajMs() : SIM.ms, p = dijelovi(sad, tz);
+    const cilj = lokalnoUUtc(p.y, p.m, p.d, min, tz);
+    SIM.ms = cilj - (U.satOk ? U.pomakSata : 0);
+    osvjeziPanele();
+}
+{
+    const k = $("#klizac");
+    k.addEventListener("input", () => { vucem = true; postaviDobaDana(+k.value); });
+    k.addEventListener("change", () => { vucem = false; });
+    k.addEventListener("pointerup", () => { vucem = false; });
+}
+
+// ================= PETLJA =================
+let zadnje = performance.now(), zadnjiPanel = 0;
+function petlja(t) {
+    const dt = (t - zadnje) / 1000; zadnje = t;
+    if (!SIM.pauza) SIM.ms += dt * 1000 * SIM.brzina;
+    c.fillStyle = BG; c.fillRect(0, 0, W, H);
+    if (!U.gasen && U.ekran) U.ekran.crtaj();
+    if (t - zadnjiPanel > 200) { zadnjiPanel = t; osvjeziPanele(); }
+    requestAnimationFrame(petlja);
+}
+pocetak();
+requestAnimationFrame(petlja);
+</script>
+
+</html>
